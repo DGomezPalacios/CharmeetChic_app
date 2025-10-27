@@ -1,4 +1,4 @@
-package com.example.charmeetchic_grupo2.ui.ui.theme
+package com.example.charmeetchic_grupo2.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
