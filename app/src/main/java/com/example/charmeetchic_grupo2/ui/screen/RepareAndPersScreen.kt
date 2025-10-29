@@ -247,20 +247,20 @@ fun RepareAndPersScreen(
                 }
             }
 
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.weight(1f, fill = true))
 
-            // 🔹 Botones de acción
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .navigationBarsPadding()   // evita quedar debajo de la barra
+                    .padding(bottom = 16.dp),  // respirito final
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 OutlinedButton(
                     onClick = onGoBack,
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(30.dp)
-                ) {
-                    Text("Volver")
-                }
+                ) { Text("Volver") }
 
                 Button(
                     onClick = {
@@ -283,10 +283,7 @@ fun RepareAndPersScreen(
                         .weight(1f)
                         .height(50.dp),
                     shape = RoundedCornerShape(30.dp)
-                ) {
-                    Text("Enviar solicitud")
-                }
-
+                ) { Text("Enviar solicitud") }
             }
 
             AnimatedVisibility(
