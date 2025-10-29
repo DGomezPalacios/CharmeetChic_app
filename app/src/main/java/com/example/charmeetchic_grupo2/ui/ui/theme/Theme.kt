@@ -1,59 +1,72 @@
 package com.example.charmeetchic_grupo2.ui.theme
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import com.example.charmeetchic_grupo2.ui.theme.*
+import androidx.compose.ui.unit.dp
 
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+// 🌞 Tema claro
+private val LightColors = lightColorScheme(
+    primary = Dorado,
+    onPrimary = androidx.compose.ui.graphics.Color.White,
+    secondary = Lavanda,
+    onSecondary = androidx.compose.ui.graphics.Color.White,
+    background = BlancoSuave,
+    onBackground = TextoOscuro,
+    surface = androidx.compose.ui.graphics.Color.White,
+    onSurface = TextoOscuro,
+    outline = GrisClaro
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+// 🌙 Tema oscuro
+private val DarkColors = darkColorScheme(
+    primary = DoradoOscuro,
+    onPrimary = androidx.compose.ui.graphics.Color.Black,
+    secondary = Lavanda,
+    onSecondary = androidx.compose.ui.graphics.Color.Black,
+    background = androidx.compose.ui.graphics.Color(0xFF121212),
+    onBackground = androidx.compose.ui.graphics.Color.White,
+    surface = androidx.compose.ui.graphics.Color(0xFF1E1E1E),
+    onSurface = androidx.compose.ui.graphics.Color.White,
+    outline = androidx.compose.ui.graphics.Color(0xFF333333)
 )
 
+// 💎 Tema global Charme et Chic
 @Composable
 fun CharmeetChic_Grupo2Theme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
+    val colorScheme = if (darkTheme) DarkColors else LightColors
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
+        typography = Typography(),
+        shapes = Shapes(
+            small = RoundedCornerShape(6.dp),
+            medium = RoundedCornerShape(10.dp),
+            large = RoundedCornerShape(16.dp)
+        ),
         content = content
     )
+}
+
+// ✨ Estilos reutilizables para botones y campos
+object CharmeetChicUI {
+
+    val buttonColors: ButtonColors
+        @Composable
+        get() = ButtonDefaults.buttonColors(
+            containerColor = Dorado,
+            contentColor = androidx.compose.ui.graphics.Color.White,
+            disabledContainerColor = Dorado.copy(alpha = 0.4f)
+        )
+
+    val textFieldColors: TextFieldColors
+        @Composable
+        get() = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Dorado,
+            unfocusedBorderColor = GrisClaro,
+            cursorColor = Dorado
+        )
 }

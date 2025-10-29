@@ -6,78 +6,83 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.charmeetchic_grupo2.viewmodel.AuthViewModel
+import com.example.charmeetchic_grupo2.ui.theme.CharmeetChicUI
 
 @Composable
 fun LoginScreen(
     onLoginOk: () -> Unit,
-    onGoRegister: () -> Unit,
-    viewModel: AuthViewModel = viewModel()
+    onGoRegister: () -> Unit
 ) {
-    val bg = MaterialTheme.colorScheme.secondaryContainer
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(bg)
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // 🔹 Título
             Text(
                 text = "Iniciar Sesión",
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground
             )
-            Spacer(Modifier.height(16.dp))
 
+            // 🔹 Campo de correo
             OutlinedTextField(
-                value = viewModel.email,
-                onValueChange = { viewModel.email = it },
+                value = email,
+                onValueChange = { email = it },
                 label = { Text("Correo electrónico") },
-                isError = viewModel.emailError,
-                supportingText = {
-                    if (viewModel.emailError) Text("Formato de correo inválido")
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier.fillMaxWidth(),
+                colors = CharmeetChicUI.textFieldColors            )
 
-            Spacer(Modifier.height(12.dp))
-
+            // 🔹 Campo de contraseña
             OutlinedTextField(
-                value = viewModel.password,
-                onValueChange = { viewModel.password = it },
+                value = password,
+                onValueChange = { password = it },
                 label = { Text("Contraseña") },
-                isError = viewModel.passwordError,
-                supportingText = {
-                    if (viewModel.passwordError) Text("Mínimo 6 caracteres")
-                },
-                visualTransformation = PasswordVisualTransformation(),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
+                modifier = Modifier.fillMaxWidth(),
+                colors = CharmeetChicUI.textFieldColors            )
 
-            Spacer(Modifier.height(20.dp))
-
+            // 🔹 Botón de ingreso
             Button(
-                onClick = {
-                    if (viewModel.canLogin()) onLoginOk()
-                },
-                enabled = viewModel.canLogin(),
-                modifier = Modifier.fillMaxWidth()
+                onClick = onLoginOk,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                colors = CharmeetChicUI.buttonColors,
+                shape = MaterialTheme.shapes.medium
             ) {
                 Text("Ingresar")
             }
 
-            Spacer(Modifier.height(8.dp))
-
-            TextButton(onClick = onGoRegister) {
+            // 🔹 Botón de registro
+            OutlinedButton(
+                onClick = onGoRegister,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = MaterialTheme.shapes.medium
+            ) {
                 Text("¿No tienes cuenta? Regístrate")
             }
+
+            // 🔹 Texto informativo
+            Text(
+                text = "Tu información está segura 💎",
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

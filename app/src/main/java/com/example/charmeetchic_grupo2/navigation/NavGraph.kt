@@ -23,7 +23,7 @@ fun AppNavGraph(navController: NavHostController) {
             onGoAbout = { navController.navigate(Routes.About.route) },
             onGoContact = { navController.navigate(Routes.Contact.route) },
             onGoLogin = { navController.navigate(Routes.Login.route) },
-            onGoRegister = { navController.navigate(Routes.Register.route) },
+            onGoRegister = { navController.navigate(Routes.Register.route) }
         )
     }
 
@@ -32,7 +32,7 @@ fun AppNavGraph(navController: NavHostController) {
         startDestination = Routes.Home.route
     ) {
 
-        // HOME
+        // 🏠 HOME
         composable(Routes.Home.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -44,7 +44,7 @@ fun AppNavGraph(navController: NavHostController) {
             }
         }
 
-        // CATALOG
+        // 💍 CATALOG
         composable(Routes.Catalog.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -53,7 +53,7 @@ fun AppNavGraph(navController: NavHostController) {
             }
         }
 
-        // CART
+        // 🛒 CART
         composable(Routes.Cart.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -62,7 +62,19 @@ fun AppNavGraph(navController: NavHostController) {
             }
         }
 
-        // ABOUT
+        // 💎 REPARAR Y PERSONALIZAR
+        composable(Routes.RepareAndPers.route) {
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    RepareAndPersScreen(
+                        onGoBack = { navController.popBackStack() },
+                        onSendRequest = { navController.navigate(Routes.Home.route) }
+                    )
+                }
+            }
+        }
+
+        // 📖 ABOUT US
         composable(Routes.About.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -71,7 +83,7 @@ fun AppNavGraph(navController: NavHostController) {
             }
         }
 
-        // CONTACT
+        // ✉️ CONTACT
         composable(Routes.Contact.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -80,19 +92,19 @@ fun AppNavGraph(navController: NavHostController) {
             }
         }
 
-        // LOGIN
+        // 🔐 LOGIN
         composable(Routes.Login.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
                     LoginScreen(
-                        onLoginOk = { navController.navigate(Routes.Home.route) },   // <- k minúscula
+                        onLoginOk = { navController.navigate(Routes.Home.route) },
                         onGoRegister = { navController.navigate(Routes.Register.route) }
                     )
                 }
             }
         }
 
-        // REGISTER
+        // 🧾 REGISTER
         composable(Routes.Register.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -103,18 +115,5 @@ fun AppNavGraph(navController: NavHostController) {
                 }
             }
         }
-
-        // REPARE AND PERS
-        composable(Routes.RepareAndPers.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
-                    RepareAndPersScreen(
-                        onGoBack = { navController.popBackStack() },
-                        onSendRequest = { /* Acción al enviar formulario */ }
-                    )
-                }
-            }
-        }
-
     }
 }

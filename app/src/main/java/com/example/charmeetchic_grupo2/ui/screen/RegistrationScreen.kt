@@ -6,106 +6,95 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.charmeetchic_grupo2.viewmodel.AuthViewModel
+import com.example.charmeetchic_grupo2.ui.theme.CharmeetChicUI
 
 @Composable
 fun RegistrationScreen(
-    onGoLogin: () -> Unit,    // Navegar al Login
-    onRegisterOk: () -> Unit, // Accion al registrarse correctamente
-    viewModel: AuthViewModel = viewModel()
+    onGoLogin: () -> Unit,
+    onRegisterOk: () -> Unit
 ) {
-    val bg = MaterialTheme.colorScheme.tertiaryContainer
+    var name by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(bg)
-            .padding(16.dp),
+            .background(MaterialTheme.colorScheme.background)
+            .padding(24.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-
+            // 🔹 Título
             Text(
                 text = "Registro de Usuario",
                 style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Center
+                color = MaterialTheme.colorScheme.onBackground
             )
 
-            Spacer(Modifier.height(16.dp))
-
-            // Campo Nombre
+            // 🔹 Campo nombre
             OutlinedTextField(
-                value = viewModel.name,
-                onValueChange = { viewModel.name = it },
+                value = name,
+                onValueChange = { name = it },
                 label = { Text("Nombre completo") },
-                isError = viewModel.nameError,
-                supportingText = {
-                    if (viewModel.nameError) Text("El nombre debe tener al menos 3 caracteres")
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = CharmeetChicUI.textFieldColors
             )
 
-            Spacer(Modifier.height(12.dp))
-
-            // Campo Correo
+            // 🔹 Campo correo
             OutlinedTextField(
-                value = viewModel.email,
-                onValueChange = { viewModel.email = it },
+                value = email,
+                onValueChange = { email = it },
                 label = { Text("Correo electrónico") },
-                isError = viewModel.emailError,
-                supportingText = {
-                    if (viewModel.emailError) Text("Formato de correo inválido")
-                },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = CharmeetChicUI.textFieldColors
             )
 
-            Spacer(Modifier.height(12.dp))
-
-            // Campo Contraseña
+            // 🔹 Campo contraseña
             OutlinedTextField(
-                value = viewModel.password,
-                onValueChange = { viewModel.password = it },
+                value = password,
+                onValueChange = { password = it },
                 label = { Text("Contraseña") },
-                isError = viewModel.passwordError,
-                supportingText = {
-                    if (viewModel.passwordError) Text("Debe tener al menos 6 caracteres")
-                },
-                visualTransformation = PasswordVisualTransformation(),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = CharmeetChicUI.textFieldColors
             )
 
-            Spacer(Modifier.height(24.dp))
-
-            // Botón de Registro
+            // 🔹 Botón principal
             Button(
-                onClick = {
-                    if (viewModel.canRegister()) {
-                        onRegisterOk()
-                    }
-                },
-                enabled = viewModel.canRegister(),
-                modifier = Modifier.fillMaxWidth()
+                onClick = onRegisterOk,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                colors = CharmeetChicUI.buttonColors,
+                shape = MaterialTheme.shapes.medium
             ) {
                 Text("Registrarse")
             }
 
-            Spacer(Modifier.height(8.dp))
-
-            // Enlace para volver al Login
-            TextButton(onClick = onGoLogin) {
+            // 🔹 Botón alternativo
+            OutlinedButton(
+                onClick = onGoLogin,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp),
+                shape = MaterialTheme.shapes.medium
+            ) {
                 Text("¿Ya tienes cuenta? Inicia sesión")
             }
+
+            // 🔹 Mensaje inferior
+            Text(
+                text = "Tu información se mantendrá protegida 💖",
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }
