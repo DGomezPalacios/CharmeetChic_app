@@ -90,7 +90,7 @@ fun RegistrationScreen(
 
             // 🔹 Mensaje inferior
             Text(
-                text = "Tu información se mantendrá protegida 💖",
+                text = "Tu información se mantendrá protegida",
                 style = MaterialTheme.typography.bodySmall,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onSurface

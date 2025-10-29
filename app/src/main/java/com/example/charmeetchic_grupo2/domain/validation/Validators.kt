@@ -32,3 +32,7 @@ fun validatePhoneDigitsOnly(phone: String, minLen: Int = 9): String? {
     return null
 }
 
+/** valida que noe ste vacio*/
+fun validateNotEmpty(text: String): String? =
+    if (text.isBlank()) "Campo obligatorio" else null
+
