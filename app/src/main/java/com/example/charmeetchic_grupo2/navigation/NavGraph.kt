@@ -1,65 +1,107 @@
 package com.example.charmeetchic_grupo2.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.charmeetchic_grupo2.ui.screen.HomeScreen
-import com.example.charmeetchic_grupo2.ui.screen.LoginScreen
-import com.example.charmeetchic_grupo2.ui.screen.RegistrationScreen
-import com.example.charmeetchic_grupo2.ui.screen.AboutUsScreen
-import com.example.charmeetchic_grupo2.ui.screen.CatalogScreen
-import com.example.charmeetchic_grupo2.ui.screen.CartScreen
-import com.example.charmeetchic_grupo2.ui.screen.ContactScreen
-
+import com.example.charmeetchic_grupo2.ui.components.AppTopBar
+import com.example.charmeetchic_grupo2.ui.screen.*
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
+
+    fun topBar() = @Composable {
+        AppTopBar(
+            onGoHome = { navController.navigate(Routes.Home.route) },
+            onGoCatalog = { navController.navigate(Routes.Catalog.route) },
+            onGoCart = { navController.navigate(Routes.Cart.route) },
+            onGoAbout = { navController.navigate(Routes.About.route) },
+            onGoContact = { navController.navigate(Routes.Contact.route) },
+            onGoLogin = { navController.navigate(Routes.Login.route) },
+            onGoRegister = { navController.navigate(Routes.Register.route) },
+        )
+    }
+
     NavHost(
         navController = navController,
-        startDestination = Routes.Home.route // Pantalla inicial
+        startDestination = Routes.Home.route
     ) {
-        // 🏠 Home
+
+        // HOME
         composable(Routes.Home.route) {
-            HomeScreen(
-                onGoCatalog = { navController.navigate(Routes.Catalog.route) },
-                onGoLogin = { navController.navigate(Routes.Login.route) }
-            )
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    HomeScreen(
+                        onGoCatalog = { navController.navigate(Routes.Catalog.route) },
+                        onGoLogin = { navController.navigate(Routes.Login.route) }
+                    )
+                }
+            }
         }
 
-        // 🔐 Login
-        composable(Routes.Login.route) {
-            LoginScreen(
-                onLoginOk = { navController.navigate(Routes.Home.route) },
-                onGoRegister = { navController.navigate(Routes.Register.route) }
-            )
-        }
-
-        // 📝 Registro
-        composable(Routes.Register.route) {
-            RegistrationScreen(
-                onGoLogin = { navController.navigate(Routes.Login.route) },
-                onRegisterOk = { navController.navigate(Routes.Home.route) }
-            )
-        }
-        // 🛍️ Catálogo
+        // CATALOG
         composable(Routes.Catalog.route) {
-            CatalogScreen()
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    CatalogScreen()
+                }
+            }
         }
 
-// 🧺 Carrito
+        // CART
         composable(Routes.Cart.route) {
-            CartScreen()
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    CartScreen()
+                }
+            }
         }
 
-// ℹ️ About us
+        // ABOUT
         composable(Routes.About.route) {
-            AboutUsScreen()
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    AboutUsScreen()
+                }
+            }
         }
 
-// ✉️ Contacto
+        // CONTACT
         composable(Routes.Contact.route) {
-            ContactScreen()
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    ContactScreen()
+                }
+            }
         }
+
+        // LOGIN
+        composable(Routes.Login.route) {
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    LoginScreen(
+                        onLoginOk = { navController.navigate(Routes.Home.route) },   // <- k minúscula
+                        onGoRegister = { navController.navigate(Routes.Register.route) }
+                    )
+                }
+            }
+        }
+
+        // REGISTER
+        composable(Routes.Register.route) {
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    RegistrationScreen(
+                        onGoLogin = { navController.navigate(Routes.Login.route) },
+                        onRegisterOk = { navController.navigate(Routes.Home.route) }
+                    )
+                }
+            }
+        }
+
     }
 }

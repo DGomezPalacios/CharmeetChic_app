@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.charmeetchic_grupo2.viewmodel.ContactViewModel
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 
 @Composable
@@ -52,7 +53,7 @@ fun ContactScreen(vm: ContactViewModel = viewModel()) {
         if (s.enviado) {
             AssistChip(onClick = vm::reset, label = { Text("¡Mensaje enviado! Toca para limpiar.") })
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
             Button(onClick = {
                 ctx.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:+56912345678")))
             }) { Text("Llamar") }
