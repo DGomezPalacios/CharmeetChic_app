@@ -1,107 +1,79 @@
 package com.example.charmeetchic_grupo2.ui.screen
 
-import androidx.compose.foundation.background
+// imports clave
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Modifier           // <— explícito para evitar el error
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.text.font.FontWeight
+import coil.compose.AsyncImage
+
+//saveable no nulo
+private val UriSaver: Saver<Uri?, String> = Saver(
+    save = { it?.toString() ?: "" },
+    restore = { s -> if (s.isEmpty()) null else Uri.parse(s) }
+)
 
 @Composable
-fun RepareAndPersScreen(
-    onGoBack: () -> Unit,        // volver al Home o al menú principal
-    onSendRequest: () -> Unit    // acción al enviar formulario
-) {
-    val bg = MaterialTheme.colorScheme.surfaceVariant
+fun RepareAndPersScreen() {
+    var selected by rememberSaveable(stateSaver = UriSaver) { mutableStateOf<Uri?>(null) }
+    var note by remember { mutableStateOf("") }
 
-    var name by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var isValid by remember { mutableStateOf(true) }
+    val picker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { uri -> selected = uri }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(bg)
-            .padding(20.dp),
-        contentAlignment = Alignment.Center
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(14.dp),
-            modifier = Modifier.fillMaxWidth()
-        ) {
+        Text("Reparación y Personalización", style = MaterialTheme.typography.headlineSmall)
 
-            Text(
-                text = "Reparación y Personalización",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
-
-            Text(
-                text = "Completa el formulario para solicitar una reparación o personalización de tu joya.",
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            OutlinedTextField(
-                value = name,
-                onValueChange = { name = it },
-                label = { Text("Nombre completo") },
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Correo electrónico") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Describe el servicio que necesitas") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp)
-            )
-
-            if (!isValid) {
-                Text(
-                    text = "Por favor, completa todos los campos antes de enviar.",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
+        Button(
+            onClick = {
+                picker.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Adjuntar foto de la joya") }
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                OutlinedButton(onClick = onGoBack) {
-                    Text("Volver")
-                }
-
-                Button(onClick = {
-                    if (name.isNotBlank() && email.isNotBlank() && description.isNotBlank()) {
-                        onSendRequest()
-                    } else {
-                        isValid = false
-                    }
-                }) {
-                    Text("Enviar solicitud")
+        AnimatedVisibility(visible = selected != null) {
+            Card(Modifier.fillMaxWidth().animateContentSize()) {
+                Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    AsyncImage(
+                        model = selected,
+                        contentDescription = "Foto seleccionada",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+                    OutlinedTextField(
+                        value = note,
+                        onValueChange = { note = it },
+                        label = { Text("Comentario (opcional)") },
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
         }
+
+        Button(
+            onClick = { /* TODO: enviar pedido con URI y nota */ },
+            enabled = selected != null,
+            modifier = Modifier.fillMaxWidth()
+        ) { Text("Enviar solicitud") }
     }
 }
