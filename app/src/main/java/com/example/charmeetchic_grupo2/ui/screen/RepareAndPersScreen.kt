@@ -29,6 +29,8 @@ import com.example.charmeetchic_grupo2.ui.theme.Dorado
 import com.example.charmeetchic_grupo2.ui.theme.TextoOscuro
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.example.charmeetchic_grupo2.domain.validation.*
+
 
 private val UriSaver: Saver<Uri?, String> = Saver(
     save = { it?.toString() ?: "" },
@@ -47,6 +49,11 @@ fun RepareAndPersScreen(
     var description by remember { mutableStateOf("") }
     var serviceType by remember { mutableStateOf("Reparación") }
     var showSuccess by remember { mutableStateOf(false) }
+    var nameError by remember { mutableStateOf<String?>(null) }
+    var phoneError by remember { mutableStateOf<String?>(null) }
+    var emailError by remember { mutableStateOf<String?>(null) }
+    var descriptionError by remember { mutableStateOf<String?>(null) }
+
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -87,27 +94,71 @@ fun RepareAndPersScreen(
 
             OutlinedTextField(
                 value = name,
-                onValueChange = { name = it },
+                onValueChange = {
+                    name = it
+                    nameError = validateNameLettersOnly(name)
+                },
                 label = { Text("Nombre completo") },
+                isError = nameError != null,
+                supportingText = {
+                    nameError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = CharmeetChicUI.textFieldColors
             )
+
 
             OutlinedTextField(
                 value = phone,
-                onValueChange = { phone = it },
+                onValueChange = {
+                    phone = it
+                    phoneError = validatePhoneDigitsOnly(phone)
+                },
                 label = { Text("Teléfono") },
+                isError = phoneError != null,
+                supportingText = {
+                    phoneError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = CharmeetChicUI.textFieldColors
+            )
+
+
+            OutlinedTextField(
+                value = email,
+                onValueChange = {
+                    email = it
+                    emailError = validateEmail(email)
+                },
+                label = { Text("Correo electrónico") },
+                isError = emailError != null,
+                supportingText = {
+                    emailError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                },
                 modifier = Modifier.fillMaxWidth(),
                 colors = CharmeetChicUI.textFieldColors
             )
 
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Correo electrónico") },
-                modifier = Modifier.fillMaxWidth(),
+                value = description,
+                onValueChange = {
+                    description = it
+                    descriptionError = if (it.isBlank()) "Campo obligatorio" else null
+                },
+                label = { Text("Descripción del trabajo") },
+                isError = descriptionError != null,
+                supportingText = {
+                    descriptionError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
                 colors = CharmeetChicUI.textFieldColors
             )
+
+
+
+
 
             // 🔸 Tipo de servicio con estilo intuitivo
             Text("Tipo de servicio", style = MaterialTheme.typography.bodyMedium)
@@ -162,15 +213,6 @@ fun RepareAndPersScreen(
                 }
             }
 
-            OutlinedTextField(
-                value = description,
-                onValueChange = { description = it },
-                label = { Text("Descripción del trabajo") },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                colors = CharmeetChicUI.textFieldColors
-            )
 
             Button(
                 onClick = {
@@ -230,7 +272,12 @@ fun RepareAndPersScreen(
                             showSuccess = false
                         }
                     },
-                    enabled = selected != null && name.isNotBlank(),
+                    enabled = selected != null &&
+                            nameError == null &&
+                            phoneError == null &&
+                            emailError == null &&
+                            descriptionError == null &&
+                            name.isNotBlank(),
                     colors = CharmeetChicUI.buttonColors,
                     modifier = Modifier
                         .weight(1f)
@@ -239,6 +286,7 @@ fun RepareAndPersScreen(
                 ) {
                     Text("Enviar solicitud")
                 }
+
             }
 
             AnimatedVisibility(
