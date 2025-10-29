@@ -19,19 +19,21 @@ import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.charmeetchic_grupo2.domain.validation.validateEmail
+import com.example.charmeetchic_grupo2.domain.validation.validateNameLettersOnly
+import com.example.charmeetchic_grupo2.domain.validation.validatePhoneDigitsOnly
 import com.example.charmeetchic_grupo2.ui.theme.CharmeetChicUI
 import com.example.charmeetchic_grupo2.ui.theme.Dorado
 import com.example.charmeetchic_grupo2.ui.theme.TextoOscuro
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.example.charmeetchic_grupo2.domain.validation.*
+import androidx.compose.foundation.text.KeyboardOptions
 
-
+// Saver para guardar/restaurar un Uri? como String
 private val UriSaver: Saver<Uri?, String> = Saver(
     save = { it?.toString() ?: "" },
     restore = { s -> if (s.isEmpty()) null else Uri.parse(s) }
@@ -42,25 +44,29 @@ fun RepareAndPersScreen(
     onGoBack: () -> Unit = {},
     onSendRequest: () -> Unit = {}
 ) {
+    // --------- Estados de UI ----------
     var selected by rememberSaveable(stateSaver = UriSaver) { mutableStateOf<Uri?>(null) }
-    var name by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var serviceType by remember { mutableStateOf("Reparación") }
-    var showSuccess by remember { mutableStateOf(false) }
-    var nameError by remember { mutableStateOf<String?>(null) }
-    var phoneError by remember { mutableStateOf<String?>(null) }
-    var emailError by remember { mutableStateOf<String?>(null) }
-    var descriptionError by remember { mutableStateOf<String?>(null) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var phone by rememberSaveable { mutableStateOf("") }
+    var email by rememberSaveable { mutableStateOf("") }
+    var description by rememberSaveable { mutableStateOf("") }
+    var serviceType by rememberSaveable { mutableStateOf("Reparación") }
 
+    // Errores de validación (null = OK)
+    val nameError = validateNameLettersOnly(name)
+    val phoneDigitsError = validatePhoneDigitsOnly(phone)
+    val phoneLenError = if (phone.length < 9) "Debe tener al menos 9 dígitos" else null
+    val phoneError = phoneDigitsError ?: phoneLenError
+    val emailError = validateEmail(email)
 
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
     val picker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri -> selected = uri }
 
+    // --------- UI ----------
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize()
@@ -72,7 +78,7 @@ fun RepareAndPersScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
                 .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = 24.dp, vertical = 32.dp),
+                .padding(horizontal = 24.dp, vertical = 20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -92,85 +98,53 @@ fun RepareAndPersScreen(
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
 
+            // Nombre
             OutlinedTextField(
                 value = name,
-                onValueChange = {
-                    name = it
-                    nameError = validateNameLettersOnly(name)
-                },
+                onValueChange = { name = it },
                 label = { Text("Nombre completo") },
                 isError = nameError != null,
-                supportingText = {
-                    nameError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
+                supportingText = { if (nameError != null) Text(nameError) },
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 colors = CharmeetChicUI.textFieldColors
             )
 
-
+            // Teléfono (solo números)
             OutlinedTextField(
                 value = phone,
-                onValueChange = {
-                    phone = it
-                    phoneError = validatePhoneDigitsOnly(phone)
-                },
+                onValueChange = { phone = it },
                 label = { Text("Teléfono") },
                 isError = phoneError != null,
-                supportingText = {
-                    phoneError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
+                supportingText = { if (phoneError != null) Text(phoneError!!) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 colors = CharmeetChicUI.textFieldColors
             )
 
-
+            // Correo
             OutlinedTextField(
                 value = email,
-                onValueChange = {
-                    email = it
-                    emailError = validateEmail(email)
-                },
+                onValueChange = { email = it },
                 label = { Text("Correo electrónico") },
                 isError = emailError != null,
-                supportingText = {
-                    emailError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
+                supportingText = { if (emailError != null) Text(emailError!!) },
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth(),
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            OutlinedTextField(
-                value = description,
-                onValueChange = {
-                    description = it
-                    descriptionError = if (it.isBlank()) "Campo obligatorio" else null
-                },
-                label = { Text("Descripción del trabajo") },
-                isError = descriptionError != null,
-                supportingText = {
-                    descriptionError?.let { Text(it, color = MaterialTheme.colorScheme.error) }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(120.dp),
-                colors = CharmeetChicUI.textFieldColors
-            )
-
-
-
-
-
-            // 🔸 Tipo de servicio con estilo intuitivo
+            // Tipo de servicio
             Text("Tipo de servicio", style = MaterialTheme.typography.bodyMedium)
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                val inactiveButtonColor = Color(0xFFF5EDE3) // beige suave
+                val inactiveButtonColor = MaterialTheme.colorScheme.surfaceVariant
                 val borderColor = Dorado.copy(alpha = 0.6f)
 
-                // Botón Reparación
                 Button(
                     onClick = { serviceType = "Reparación" },
                     colors = if (serviceType == "Reparación")
@@ -187,11 +161,8 @@ fun RepareAndPersScreen(
                             color = borderColor,
                             shape = RoundedCornerShape(10.dp)
                         )
-                ) {
-                    Text("Reparación")
-                }
+                ) { Text("Reparación") }
 
-                // Botón Personalización
                 Button(
                     onClick = { serviceType = "Personalización" },
                     colors = if (serviceType == "Personalización")
@@ -208,12 +179,21 @@ fun RepareAndPersScreen(
                             color = borderColor,
                             shape = RoundedCornerShape(10.dp)
                         )
-                ) {
-                    Text("Personalización")
-                }
+                ) { Text("Personalización") }
             }
 
+            // Descripción
+            OutlinedTextField(
+                value = description,
+                onValueChange = { description = it },
+                label = { Text("Descripción del trabajo") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(120.dp),
+                colors = CharmeetChicUI.textFieldColors
+            )
 
+            // Adjuntar imagen (opcional)
             Button(
                 onClick = {
                     picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -224,7 +204,7 @@ fun RepareAndPersScreen(
                     .height(50.dp),
                 shape = RoundedCornerShape(30.dp)
             ) {
-                Text("📷 Adjuntar imagen")
+                Text("📷 Adjuntar imagen (opcional)")
             }
 
             AnimatedVisibility(
@@ -241,19 +221,16 @@ fun RepareAndPersScreen(
                 ) {
                     AsyncImage(
                         model = selected,
-                        contentDescription = "Imagen seleccionada",
-                        contentScale = ContentScale.Crop
+                        contentDescription = "Imagen seleccionada"
                     )
                 }
             }
 
-            Spacer(Modifier.weight(1f, fill = true))
-
+            // --------- Botones inferiores ----------
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .navigationBarsPadding()   // evita quedar debajo de la barra
-                    .padding(bottom = 16.dp),  // respirito final
+                    .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 OutlinedButton(
@@ -262,22 +239,20 @@ fun RepareAndPersScreen(
                     shape = RoundedCornerShape(30.dp)
                 ) { Text("Volver") }
 
+                val canSend = nameError == null && phoneError == null && emailError == null
+
                 Button(
                     onClick = {
-                        showSuccess = true
-                        onSendRequest()
-                        scope.launch {
-                            snackbarHostState.showSnackbar("✨ Solicitud enviada correctamente")
-                            delay(2000)
-                            showSuccess = false
+                        if (canSend) {
+                            onSendRequest()
+                            scope.launch {
+                                snackbarHostState.showSnackbar("✨ Solicitud enviada correctamente")
+                            }
+                            // Mantenerse en la pantalla, opcionalmente limpiar campos:
+                            // name = ""; phone = ""; email = ""; description = ""; selected = null
                         }
                     },
-                    enabled = selected != null &&
-                            nameError == null &&
-                            phoneError == null &&
-                            emailError == null &&
-                            descriptionError == null &&
-                            name.isNotBlank(),
+                    enabled = canSend,
                     colors = CharmeetChicUI.buttonColors,
                     modifier = Modifier
                         .weight(1f)
@@ -286,21 +261,7 @@ fun RepareAndPersScreen(
                 ) { Text("Enviar solicitud") }
             }
 
-            AnimatedVisibility(
-                visible = showSuccess,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Text(
-                    "Tu solicitud fue enviada correctamente 💖",
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
-            Spacer(Modifier.height(60.dp))
+            Spacer(Modifier.height(16.dp))
         }
     }
 }

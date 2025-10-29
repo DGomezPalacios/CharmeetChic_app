@@ -73,7 +73,7 @@ fun AppNavGraph(
                 Box(Modifier.padding(innerPadding)) {
                     RepareAndPersScreen(
                         onGoBack = { navController.popBackStack() },
-                        onSendRequest = { navController.navigate(Routes.Home.route) }
+                        onSendRequest = { }
                     )
                 }
             }

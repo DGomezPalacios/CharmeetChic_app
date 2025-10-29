@@ -6,7 +6,7 @@
 
     <style name="Theme.CharmeetChic.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/charme_logo</item>
-        <item name="windowSplashScreenBackground">@android:color/white</item>
+        <item name="windowSplashScreenBackground">@color/white</item>
         <item name="postSplashScreenTheme">@style/Theme.CharmeetChic</item>
     </style>
 
