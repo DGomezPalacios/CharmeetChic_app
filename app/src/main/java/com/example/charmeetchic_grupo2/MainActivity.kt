@@ -9,10 +9,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.charmeetchic_grupo2.navigation.AppNavGraph
 import com.example.charmeetchic_grupo2.ui.theme.CharmeetChic_Grupo2Theme
 import com.example.charmeetchic_grupo2.viewmodel.CartViewModel
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.compose.runtime.Composable
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,19 +25,24 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    // 🔹 Crear un solo CartViewModel para toda la app
-                    val cartVM: CartViewModel = viewModel()
-
-                    // 🔹 Crear el controlador de navegación
-                    val navController = rememberNavController()
-
-                    // 🔹 Pasar el ViewModel al grafo de navegación
-                    AppNavGraph(
-                        navController = navController,
-                        cartVM = cartVM
-                    )
+                    MainApp()
                 }
             }
         }
     }
+}
+
+@Composable
+fun MainApp() {
+    // Un solo ViewModel de carrito para toda la app
+    val cartVM: CartViewModel = viewModel()
+
+    // Controlador de navegación
+    val navController = rememberNavController()
+
+    // Grafo de navegación con VM compartido
+    AppNavGraph(
+        navController = navController,
+        cartVM = cartVM
+    )
 }
