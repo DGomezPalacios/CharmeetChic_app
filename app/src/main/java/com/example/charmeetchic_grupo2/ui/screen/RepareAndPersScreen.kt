@@ -30,7 +30,6 @@ import com.example.charmeetchic_grupo2.ui.theme.TextoOscuro
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-// Guarda la imagen seleccionada de forma persistente
 private val UriSaver: Saver<Uri?, String> = Saver(
     save = { it?.toString() ?: "" },
     restore = { s -> if (s.isEmpty()) null else Uri.parse(s) }
@@ -173,7 +172,6 @@ fun RepareAndPersScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // Adjuntar imagen
             Button(
                 onClick = {
                     picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
