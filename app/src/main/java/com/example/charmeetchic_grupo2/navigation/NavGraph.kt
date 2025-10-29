@@ -19,6 +19,7 @@ fun AppNavGraph(navController: NavHostController) {
             onGoHome = { navController.navigate(Routes.Home.route) },
             onGoCatalog = { navController.navigate(Routes.Catalog.route) },
             onGoCart = { navController.navigate(Routes.Cart.route) },
+            onGoRepare = { navController.navigate(Routes.RepareAndPers.route) },
             onGoAbout = { navController.navigate(Routes.About.route) },
             onGoContact = { navController.navigate(Routes.Contact.route) },
             onGoLogin = { navController.navigate(Routes.Login.route) },
@@ -98,6 +99,18 @@ fun AppNavGraph(navController: NavHostController) {
                     RegistrationScreen(
                         onGoLogin = { navController.navigate(Routes.Login.route) },
                         onRegisterOk = { navController.navigate(Routes.Home.route) }
+                    )
+                }
+            }
+        }
+
+        // REPARE AND PERS
+        composable(Routes.RepareAndPers.route) {
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+                    RepareAndPersScreen(
+                        onGoBack = { navController.popBackStack() },
+                        onSendRequest = { /* Acción al enviar formulario */ }
                     )
                 }
             }
