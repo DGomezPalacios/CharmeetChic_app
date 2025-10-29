@@ -10,10 +10,15 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.charmeetchic_grupo2.ui.components.AppTopBar
 import com.example.charmeetchic_grupo2.ui.screen.*
+import com.example.charmeetchic_grupo2.viewmodel.CartViewModel
 
 @Composable
-fun AppNavGraph(navController: NavHostController) {
+fun AppNavGraph(
+    navController: NavHostController,
+    cartVM: CartViewModel  // 🔹 ViewModel compartido del carrito
+) {
 
+    // 🔹 TopBar con contador del carrito
     fun topBar() = @Composable {
         AppTopBar(
             onGoHome = { navController.navigate(Routes.Home.route) },
@@ -23,7 +28,8 @@ fun AppNavGraph(navController: NavHostController) {
             onGoAbout = { navController.navigate(Routes.About.route) },
             onGoContact = { navController.navigate(Routes.Contact.route) },
             onGoLogin = { navController.navigate(Routes.Login.route) },
-            onGoRegister = { navController.navigate(Routes.Register.route) }
+            onGoRegister = { navController.navigate(Routes.Register.route) },
+            cartVM = cartVM   // ✅ <-- ESTA es la línea clave para el contador
         )
     }
 
@@ -31,7 +37,6 @@ fun AppNavGraph(navController: NavHostController) {
         navController = navController,
         startDestination = Routes.Home.route
     ) {
-
         // 🏠 HOME
         composable(Routes.Home.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
@@ -48,7 +53,7 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Routes.Catalog.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
-                    CatalogScreen()
+                    CatalogScreen(cartVM = cartVM)
                 }
             }
         }
@@ -57,7 +62,7 @@ fun AppNavGraph(navController: NavHostController) {
         composable(Routes.Cart.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
-                    CartScreen()
+                    CartScreen(cartVM = cartVM)
                 }
             }
         }
@@ -117,3 +122,4 @@ fun AppNavGraph(navController: NavHostController) {
         }
     }
 }
+
