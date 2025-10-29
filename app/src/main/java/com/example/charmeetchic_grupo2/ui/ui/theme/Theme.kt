@@ -5,7 +5,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 
-// 🌞 Tema claro
+// Tema Claro
 private val LightColors = lightColorScheme(
     primary = Dorado,
     onPrimary = androidx.compose.ui.graphics.Color.White,
@@ -18,7 +18,7 @@ private val LightColors = lightColorScheme(
     outline = GrisClaro
 )
 
-// 🌙 Tema oscuro
+// Tema Oscuro
 private val DarkColors = darkColorScheme(
     primary = DoradoOscuro,
     onPrimary = androidx.compose.ui.graphics.Color.Black,
@@ -31,7 +31,7 @@ private val DarkColors = darkColorScheme(
     outline = androidx.compose.ui.graphics.Color(0xFF333333)
 )
 
-// 💎 Tema global Charme et Chic
+// Tema global
 @Composable
 fun CharmeetChic_Grupo2Theme(
     darkTheme: Boolean = false,
@@ -51,7 +51,7 @@ fun CharmeetChic_Grupo2Theme(
     )
 }
 
-// ✨ Estilos reutilizables para botones y campos
+// Botones
 object CharmeetChicUI {
 
     val buttonColors: ButtonColors

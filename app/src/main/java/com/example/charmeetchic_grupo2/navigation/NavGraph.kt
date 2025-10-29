@@ -18,7 +18,7 @@ fun AppNavGraph(
     cartVM: CartViewModel  // 🔹 ViewModel compartido del carrito
 ) {
 
-    // 🔹 TopBar con contador del carrito
+    // Contador del carrito
     fun topBar() = @Composable {
         AppTopBar(
             onGoHome = { navController.navigate(Routes.Home.route) },
@@ -37,7 +37,7 @@ fun AppNavGraph(
         navController = navController,
         startDestination = Routes.Home.route
     ) {
-        // 🏠 HOME
+        // HOME
         composable(Routes.Home.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -49,7 +49,7 @@ fun AppNavGraph(
             }
         }
 
-        // 💍 CATALOG
+        // CATALOG
         composable(Routes.Catalog.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -58,7 +58,7 @@ fun AppNavGraph(
             }
         }
 
-        // 🛒 CART
+        // CART
         composable(Routes.Cart.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -67,7 +67,7 @@ fun AppNavGraph(
             }
         }
 
-        // 💎 REPARAR Y PERSONALIZAR
+        // REPARE AND PERS
         composable(Routes.RepareAndPers.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -79,7 +79,7 @@ fun AppNavGraph(
             }
         }
 
-        // 📖 ABOUT US
+        // ABOUT US
         composable(Routes.About.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -88,7 +88,7 @@ fun AppNavGraph(
             }
         }
 
-        // ✉️ CONTACT
+        // CONTACT
         composable(Routes.Contact.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -97,7 +97,7 @@ fun AppNavGraph(
             }
         }
 
-        // 🔐 LOGIN
+        // LOGIN
         composable(Routes.Login.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -109,7 +109,7 @@ fun AppNavGraph(
             }
         }
 
-        // 🧾 REGISTER
+        // REGISTER
         composable(Routes.Register.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {

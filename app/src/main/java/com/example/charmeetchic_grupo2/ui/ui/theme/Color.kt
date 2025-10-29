@@ -2,7 +2,7 @@ package com.example.charmeetchic_grupo2.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-// 🎨 Paleta oficial Charme et Chic
+// Paleta oficial Charme et Chic
 val Dorado = Color(0xFFC49B63)
 val DoradoOscuro = Color(0xFFA87D4F)
 val BlancoSuave = Color(0xFFF9F9F9)

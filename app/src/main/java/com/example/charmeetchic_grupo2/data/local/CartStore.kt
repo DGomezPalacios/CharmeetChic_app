@@ -15,14 +15,14 @@ class CartStore(private val context: Context) {
         private val CART_KEY = stringPreferencesKey("cart_summary")
     }
 
-    // Guarda el resumen del carrito (texto)
+    // Guarda el resumen del carrito
     suspend fun saveCartInfo(info: String) {
         context.dataStore.edit { prefs ->
             prefs[CART_KEY] = info
         }
     }
 
-    // Obtiene el resumen guardado (texto)
+    // Obtiene el resumen guardado
     val cartInfo: Flow<String> = context.dataStore.data.map { prefs ->
         prefs[CART_KEY] ?: ""
     }

@@ -73,7 +73,7 @@ fun CartScreen(
             modifier = Modifier.fillMaxWidth()
         ) { Text("Finalizar compra") }
 
-        // ✅ Mensaje de éxito con animación (simple y claro)
+        // Mensaje de Compra exitosa
         AnimatedVisibility(
             visible = state.successMsg != null,
             enter = fadeIn(),
@@ -93,7 +93,7 @@ fun CartScreen(
             }
         }
 
-        // Se oculta automáticamente después de 2s
+        // Oculta el mensaje
         LaunchedEffect(state.successMsg) {
             if (state.successMsg != null) {
                 delay(2000)

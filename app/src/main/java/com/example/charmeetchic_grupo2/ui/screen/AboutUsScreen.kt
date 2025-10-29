@@ -22,7 +22,6 @@ fun AboutUsScreen() {
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally // ✅ Centra el contenido
     ) {
-        // 🔹 Título centrado
         Text(
             text = "Quiénes Somos",
             style = MaterialTheme.typography.headlineSmall.copy(
@@ -32,7 +31,6 @@ fun AboutUsScreen() {
             color = MaterialTheme.colorScheme.onBackground
         )
 
-        // 🔹 Texto descriptivo adaptado del proyecto React
         Text(
             text = "En Charme et Chic creemos que cada joya guarda una historia. " +
                     "Nacimos como un emprendimiento de joyería artesanal con la misión de " +
@@ -55,7 +53,6 @@ fun AboutUsScreen() {
             textAlign = TextAlign.Justify
         )
 
-        // 🔹 Imagen al final
         Spacer(modifier = Modifier.height(16.dp))
         Image(
             painter = painterResource(id = R.drawable.charme_about),

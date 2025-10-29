@@ -31,14 +31,12 @@ fun RegistrationScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            // 🔹 Título
             Text(
                 text = "Registro de Usuario",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
-            // 🔹 Campo nombre
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -47,7 +45,6 @@ fun RegistrationScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // 🔹 Campo correo
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -56,7 +53,6 @@ fun RegistrationScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // 🔹 Campo contraseña
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -65,7 +61,6 @@ fun RegistrationScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // 🔹 Botón principal
             Button(
                 onClick = onRegisterOk,
                 modifier = Modifier
@@ -77,7 +72,6 @@ fun RegistrationScreen(
                 Text("Registrarse")
             }
 
-            // 🔹 Botón alternativo
             OutlinedButton(
                 onClick = onGoLogin,
                 modifier = Modifier
@@ -88,7 +82,6 @@ fun RegistrationScreen(
                 Text("¿Ya tienes cuenta? Inicia sesión")
             }
 
-            // 🔹 Mensaje inferior
             Text(
                 text = "Tu información se mantendrá protegida",
                 style = MaterialTheme.typography.bodySmall,

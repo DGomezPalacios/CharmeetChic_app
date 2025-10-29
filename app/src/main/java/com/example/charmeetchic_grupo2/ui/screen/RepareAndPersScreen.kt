@@ -66,7 +66,7 @@ fun RepareAndPersScreen(
         contract = ActivityResultContracts.PickVisualMedia()
     ) { uri -> selected = uri }
 
-    // --------- UI ----------
+    // UI
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         modifier = Modifier.fillMaxSize()
@@ -98,7 +98,6 @@ fun RepareAndPersScreen(
 
             Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
 
-            // Nombre
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
@@ -110,7 +109,6 @@ fun RepareAndPersScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // Teléfono (solo números)
             OutlinedTextField(
                 value = phone,
                 onValueChange = { phone = it },
@@ -123,7 +121,6 @@ fun RepareAndPersScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // Correo
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -135,7 +132,6 @@ fun RepareAndPersScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // Tipo de servicio
             Text("Tipo de servicio", style = MaterialTheme.typography.bodyMedium)
 
             Row(
@@ -182,7 +178,6 @@ fun RepareAndPersScreen(
                 ) { Text("Personalización") }
             }
 
-            // Descripción
             OutlinedTextField(
                 value = description,
                 onValueChange = { description = it },
@@ -193,7 +188,6 @@ fun RepareAndPersScreen(
                 colors = CharmeetChicUI.textFieldColors
             )
 
-            // Adjuntar imagen (opcional)
             Button(
                 onClick = {
                     picker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
@@ -226,7 +220,6 @@ fun RepareAndPersScreen(
                 }
             }
 
-            // --------- Botones inferiores ----------
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

@@ -30,14 +30,12 @@ fun LoginScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.fillMaxWidth()
         ) {
-            // 🔹 Título
             Text(
                 text = "Iniciar Sesión",
                 style = MaterialTheme.typography.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground
             )
 
-            // 🔹 Campo de correo
             OutlinedTextField(
                 value = email,
                 onValueChange = { email = it },
@@ -45,7 +43,6 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CharmeetChicUI.textFieldColors            )
 
-            // 🔹 Campo de contraseña
             OutlinedTextField(
                 value = password,
                 onValueChange = { password = it },
@@ -53,7 +50,6 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth(),
                 colors = CharmeetChicUI.textFieldColors            )
 
-            // 🔹 Botón de ingreso
             Button(
                 onClick = onLoginOk,
                 modifier = Modifier
@@ -65,7 +61,6 @@ fun LoginScreen(
                 Text("Ingresar")
             }
 
-            // 🔹 Botón de registro
             OutlinedButton(
                 onClick = onGoRegister,
                 modifier = Modifier
@@ -76,7 +71,6 @@ fun LoginScreen(
                 Text("¿No tienes cuenta? Regístrate")
             }
 
-            // 🔹 Texto informativo
             Text(
                 text = "Tu información está segura 💎",
                 style = MaterialTheme.typography.bodySmall,

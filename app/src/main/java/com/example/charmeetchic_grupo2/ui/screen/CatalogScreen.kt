@@ -26,7 +26,7 @@ fun CatalogScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // 🔹 Buscador
+        // Buscador
         OutlinedTextField(
             value = state.query,
             onValueChange = { catalogVM.onQueryChange(it) },
@@ -34,7 +34,7 @@ fun CatalogScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // 🔹 Mensaje visible y legible justo debajo
+        // Posicióm de mensaje
         cartState.successMsg?.let { msg ->
             Spacer(Modifier.height(10.dp))
             Text(
@@ -45,7 +45,7 @@ fun CatalogScreen(
                 )
             )
 
-            // Se borra solo después de 2 segundos
+            // Elimina el mensaje
             LaunchedEffect(msg) {
                 delay(2000)
                 cartVM.dismissMsg()
@@ -54,7 +54,7 @@ fun CatalogScreen(
 
         Spacer(Modifier.height(12.dp))
 
-        // 🔹 Lista de productos
+        // Lista de productos
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(state.items, key = { it.id }) { p ->
                 ProductCard(

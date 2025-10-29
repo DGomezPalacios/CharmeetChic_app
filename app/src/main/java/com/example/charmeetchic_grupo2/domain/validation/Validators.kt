@@ -12,19 +12,14 @@ fun validateNameLettersOnly(nombre: String): String? {
     return if (!regex.matches(nombre)) "Solo se aceptan letras y espacios" else null
 }
 
-/**
- * Valida correos: obligatorio y formato según Patterns de Android.
- * Retorna un mensaje de error o null si es válido.
- */
+  //Valida correos
 fun validateEmail(email: String): String? {
     if (email.isBlank()) return "El correo es obligatorio"
     val ok = Patterns.EMAIL_ADDRESS.matcher(email).matches()
     return if (!ok) "Formato de correo inválido" else null
 }
 
-/**
- Valida teléfonos: obligatorio, solo dígitos, largo mínimo (por defecto 9).
- */
+// Valida teléfonos
 fun validatePhoneDigitsOnly(phone: String, minLen: Int = 9): String? {
     if (phone.isBlank()) return "El teléfono es obligatorio"
     if (!phone.all { it.isDigit() }) return "Solo se aceptan números"
@@ -32,7 +27,7 @@ fun validatePhoneDigitsOnly(phone: String, minLen: Int = 9): String? {
     return null
 }
 
-/** valida que noe ste vacio*/
+// Valida que no esté vacio
 fun validateNotEmpty(text: String): String? =
     if (text.isBlank()) "Campo obligatorio" else null
 

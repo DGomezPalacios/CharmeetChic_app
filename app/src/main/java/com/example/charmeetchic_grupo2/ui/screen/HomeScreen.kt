@@ -33,7 +33,6 @@ fun HomeScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
-            // 🔹 Título principal
             Text(
                 text = "Bienvenidos a nuestra tienda",
                 style = MaterialTheme.typography.headlineMedium.copy(
@@ -43,7 +42,6 @@ fun HomeScreen(
                 color = MaterialTheme.colorScheme.onBackground
             )
 
-            // 🔹 Descripción corta
             Text(
                 text = "Joyería artesanal, personalización y reparación con cariño y detalle.",
                 style = MaterialTheme.typography.bodyLarge,
@@ -51,7 +49,6 @@ fun HomeScreen(
                 color = MaterialTheme.colorScheme.onBackground
             )
 
-            // 🔹 Imagen ajustada para mostrarse completa
             Image(
                 painter = painterResource(id = R.drawable.charme_home),
                 contentDescription = "Joyería exclusiva",
@@ -62,7 +59,6 @@ fun HomeScreen(
                 contentScale = ContentScale.Fit // ✅ muestra toda la imagen
             )
 
-            // 🔹 Tarjeta de presentación
             ElevatedCard(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -84,7 +80,7 @@ fun HomeScreen(
                 }
             }
 
-            // 🔹 Botones de acción
+            // Botones
             Row(
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 modifier = Modifier.padding(top = 12.dp)
