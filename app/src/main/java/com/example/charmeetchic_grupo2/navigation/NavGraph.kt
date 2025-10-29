@@ -7,10 +7,14 @@ import androidx.navigation.compose.composable
 import com.example.charmeetchic_grupo2.ui.screen.HomeScreen
 import com.example.charmeetchic_grupo2.ui.screen.LoginScreen
 import com.example.charmeetchic_grupo2.ui.screen.RegistrationScreen
+import com.example.charmeetchic_grupo2.ui.screen.AboutUsScreen
+import com.example.charmeetchic_grupo2.ui.screen.CatalogScreen
+import com.example.charmeetchic_grupo2.ui.screen.CartScreen
+import com.example.charmeetchic_grupo2.ui.screen.ContactScreen
+
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-    // Define el flujo principal de navegación
     NavHost(
         navController = navController,
         startDestination = Routes.Home.route // Pantalla inicial
@@ -37,6 +41,25 @@ fun AppNavGraph(navController: NavHostController) {
                 onGoLogin = { navController.navigate(Routes.Login.route) },
                 onRegisterOk = { navController.navigate(Routes.Home.route) }
             )
+        }
+        // 🛍️ Catálogo
+        composable(Routes.Catalog.route) {
+            CatalogScreen()
+        }
+
+// 🧺 Carrito
+        composable(Routes.Cart.route) {
+            CartScreen()
+        }
+
+// ℹ️ About us
+        composable(Routes.About.route) {
+            AboutUsScreen()
+        }
+
+// ✉️ Contacto
+        composable(Routes.Contact.route) {
+            ContactScreen()
         }
     }
 }
