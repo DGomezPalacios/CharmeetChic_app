@@ -12,7 +12,7 @@ fun validateNameLettersOnly(nombre: String): String? {
     return if (!regex.matches(nombre)) "Solo se aceptan letras y espacios" else null
 }
 
-  //Valida correos
+// Valida correos
 fun validateEmail(email: String): String? {
     if (email.isBlank()) return "El correo es obligatorio"
     val ok = Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -27,7 +27,6 @@ fun validatePhoneDigitsOnly(phone: String, minLen: Int = 9): String? {
     return null
 }
 
-// Valida que no esté vacio
+// Valida que no esté vacío
 fun validateNotEmpty(text: String): String? =
     if (text.isBlank()) "Campo obligatorio" else null
-
