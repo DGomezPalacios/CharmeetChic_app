@@ -1,94 +1,62 @@
 package com.example.charmeetchic_grupo2.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.compose.runtime.*
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.charmeetchic_grupo2.data.local.CartStore
+import com.example.charmeetchic_grupo2.model.Cart
 import com.example.charmeetchic_grupo2.model.CartItem
-import com.example.charmeetchic_grupo2.model.Product
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import com.example.charmeetchic_grupo2.model.Compras
+import com.example.charmeetchic_grupo2.repository.CartRepository
 import kotlinx.coroutines.launch
 
-data class CartState(
-    val items: List<CartItem> = emptyList(),
-    val successMsg: String? = null,
-    val savedInfo: String? = null
-) {
-    val total: Int get() = items.sumOf { it.subtotal }
-}
+class CartViewModel(
+    private val repository: CartRepository = CartRepository()
+) : ViewModel() {
 
-class CartViewModel(application: Application) : AndroidViewModel(application) {
+    var cart by mutableStateOf(Cart())
+        private set
 
-    private val cartStore = CartStore(application.applicationContext)
+    var successMsg by mutableStateOf<String?>(null)
+        private set
 
-    private val _state = MutableStateFlow(CartState())
-    val state: StateFlow<CartState> = _state
+    fun add(product: com.example.charmeetchic_grupo2.model.Product) {
+        val updated = cart.items.toMutableList()
 
-    init {
-        // Al iniciar, carga el resumen guardado en DataStore (si existe)
-        viewModelScope.launch {
-            val info = cartStore.cartInfo.first()
-            _state.value = _state.value.copy(savedInfo = info)
+        val idx = updated.indexOfFirst { it.product.id == product.id }
+        if (idx == -1) {
+            updated.add(CartItem(product, 1))
+        } else {
+            updated[idx] = updated[idx].copy(qty = updated[idx].qty + 1)
         }
-    }
 
-    fun add(p: Product) {
-        val current = _state.value.items.toMutableList()
-        val idx = current.indexOfFirst { it.product.id == p.id }
-        if (idx >= 0) current[idx] = current[idx].copy(qty = current[idx].qty + 1)
-        else current += CartItem(p, 1)
-
-        _state.value = _state.value.copy(
-            items = current,
-            successMsg = "${p.name} agregado al carrito ✅"
-        )
-
-        // Opcional: guardar persistencia simple
-        viewModelScope.launch {
-            saveCartSummary(current)
-        }
-    }
-
-    fun remove(pId: String) {
-        val updated = _state.value.items.filter { it.product.id != pId }
-        updateCart(updated)
-    }
-
-    fun dec(pId: String) {
-        val list = _state.value.items.mapNotNull {
-            if (it.product.id == pId) {
-                val q = it.qty - 1
-                if (q <= 0) null else it.copy(qty = q)
-            } else it
-        }
-        updateCart(list)
-    }
-
-    fun clearAndSuccess() {
-        _state.value = CartState(items = emptyList(), successMsg = "Compra realizada con éxito")
-        viewModelScope.launch { cartStore.clearCart() }
+        cart = cart.copy(items = updated)
     }
 
     fun dismissMsg() {
-        _state.value = _state.value.copy(successMsg = null)
+        successMsg = null
     }
 
-    // Guarda un resumen simple en DataStore (cantidad + total)
-    private fun saveCartSummary(items: List<CartItem>) {
+    // convertidor Cart en Compras para buen uso del backend
+    private fun cartToCompras(): Compras {
+        return Compras(
+            id = null,
+            usuarioId = null,      // lo conectamos cuando agreguen login real
+            estado = "en carrito",
+            total = cart.total.toDouble()
+        )
+    }
+
+    // guardar en el backend
+    fun guardarCarritoEnBackend() {
         viewModelScope.launch {
-            val totalItems = items.sumOf { it.qty }
-            val totalPrice = items.sumOf { it.subtotal }
-            val summary = "Productos: $totalItems | Total: $totalPrice CLP"
-            cartStore.saveCartInfo(summary)
+            try {
+                val compra = cartToCompras()  // ← conversión aquí
+                repository.agregarAlCarrito(compra)
+
+                successMsg = "Carrito guardado correctamente"
+            } catch (e: Exception) {
+                successMsg = "Error al guardar: ${e.message}"
+            }
         }
     }
-
-    // Actualiza el estado del carrito y guarda el resumen en DataStore
-    private fun updateCart(newList: List<CartItem>) {
-        _state.value = _state.value.copy(items = newList, successMsg = null)
-        saveCartSummary(newList)
-    }
-
 }
