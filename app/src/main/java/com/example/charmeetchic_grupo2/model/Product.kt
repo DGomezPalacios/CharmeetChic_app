@@ -1,10 +1,12 @@
 package com.example.charmeetchic_grupo2.model
 
 data class Product(
-    val id: String,
-    val name: String,
-    val price: Int,
-    val imageUrl: String? = null,   
-    val category: String,
+    val id: Long,
+    val nombre: String,
+    val precio: Double,
+    val categoria: String,
+    val imagenUrl: String? = null,
+
+    // Campo extra opcional para imágenes locales
     val imageRes: Int? = null
 )

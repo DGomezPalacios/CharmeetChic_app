@@ -15,53 +15,63 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CatalogScreen(
-    catalogVM: CatalogViewModel = androidx.lifecycle.viewmodel.compose.viewModel(),
-    cartVM: CartViewModel
+    cartVM: CartViewModel,
+    productVM: ProductViewModel = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
-    val state by catalogVM.state.collectAsState()
-    val cartState by cartVM.state.collectAsState() // acceder al mensaje
+    val productos = productVM.productList
+    val isLoading = productVM.isLoading
+    val error = productVM.errorMessage
+
+    var query by remember { mutableStateOf("") }
+
+    // Se cargan los productos al entrar
+    LaunchedEffect(Unit) {
+        productVM.cargarProductos()
+    }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        // Buscador
+        // 🔍 Buscador
         OutlinedTextField(
-            value = state.query,
-            onValueChange = { catalogVM.onQueryChange(it) },
+            value = query,
+            onValueChange = {
+                query = it
+                if (query.isBlank()) {
+                    productVM.cargarProductos()
+                } else {
+                    productVM.buscar(query)
+                }
+            },
             label = { Text("Buscar producto") },
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Posicióm de mensaje
-        cartState.successMsg?.let { msg ->
-            Spacer(Modifier.height(10.dp))
-            Text(
-                text = msg,
-                color = Color(0xFF333333), // gris oscuro legible
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = androidx.compose.ui.text.font.FontWeight.Medium
-                )
-            )
-
-            // Elimina el mensaje
-            LaunchedEffect(msg) {
-                delay(2000)
-                cartVM.dismissMsg()
-            }
-        }
-
         Spacer(Modifier.height(12.dp))
 
-        // Lista de productos
+        // 🟡 Loading
+        if (isLoading) {
+            CircularProgressIndicator()
+            return
+        }
+
+        // ❌ Error
+        if (error != null) {
+            Text(
+                text = error,
+                color = MaterialTheme.colorScheme.error
+            )
+            return
+        }
+
+        // 🟢 Lista de productos
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(state.items, key = { it.id }) { p ->
+            items(productos, key = { it.id }) { p ->
                 ProductCard(
                     product = p,
-                    onAddToCart = {
-                        cartVM.add(p)
-                    }
+                    onAddToCart = { cartVM.add(p) }
                 )
             }
         }
