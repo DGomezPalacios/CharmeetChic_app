@@ -27,30 +27,31 @@ fun ProductCard(
     ) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
-            // 🔹 Imagen: primero drawable, si no hay, intenta URL
+            // 1️⃣ Imagen: local o desde URL
             when {
                 product.imageRes != null -> {
                     Image(
                         painter = painterResource(id = product.imageRes),
-                        contentDescription = product.name,
+                        contentDescription = product.nombre,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(180.dp),
                         contentScale = ContentScale.Fit
                     )
                 }
-                product.imageUrl != null -> {
+
+                product.imagenUrl != null -> {   // ← AHORA imagenUrl
                     AsyncImage(
-                        model = product.imageUrl,
-                        contentDescription = product.name,
+                        model = product.imagenUrl,
+                        contentDescription = product.nombre,
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(180.dp),
                         contentScale = ContentScale.Fit
                     )
                 }
+
                 else -> {
-                    // Placeholder simple
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -59,12 +60,19 @@ fun ProductCard(
                 }
             }
 
+            //  Nombre
             Text(
-                product.name,
+                product.nombre,
                 style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
             )
-            Text("Precio: \$${product.price}", style = MaterialTheme.typography.bodyMedium)
 
+            //  Precio
+            Text(
+                "Precio: \$${product.precio.toInt()}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            // Botón agregar al carrito
             Button(onClick = onAddToCart, modifier = Modifier.fillMaxWidth()) {
                 Text("Agregar al carrito")
             }

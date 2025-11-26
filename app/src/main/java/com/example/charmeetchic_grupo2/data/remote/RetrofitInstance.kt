@@ -5,7 +5,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 object RetrofitInstance {
 
     private val logging = HttpLoggingInterceptor().apply {
@@ -16,7 +15,7 @@ object RetrofitInstance {
         .addInterceptor(logging)
         .build()
 
-    // CONTACTO (Contact)
+    // CONTACTO (Microservicio Contacto)
     private const val BASE_URL_CONTACTO = "http://10.0.2.2:8091/"
     val contactoRetrofit: Retrofit by lazy {
         Retrofit.Builder()
@@ -26,7 +25,7 @@ object RetrofitInstance {
             .build()
     }
 
-    // PRODUCTO (Catalog)
+    // PRODUCTO (Microservicio Producto)
     private const val BASE_URL_PRODUCTO = "http://10.0.2.2:8088/"
     val productoRetrofit: Retrofit by lazy {
         Retrofit.Builder()
@@ -36,7 +35,7 @@ object RetrofitInstance {
             .build()
     }
 
-    // COMPRAS (Cart)
+    // COMPRAS (Microservicio Compras)
     private const val BASE_URL_COMPRAS = "http://10.0.2.2:8083/"
     val comprasRetrofit: Retrofit by lazy {
         Retrofit.Builder()

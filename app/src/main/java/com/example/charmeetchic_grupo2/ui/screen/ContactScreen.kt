@@ -7,61 +7,83 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.charmeetchic_grupo2.viewmodel.ContactViewModel
-import android.content.Intent
-import android.net.Uri
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun ContactScreen(vm: ContactViewModel = viewModel()) {
-    val s by vm.state.collectAsState()
-    val ctx = LocalContext.current
 
-    Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+    val isLoading = vm.isLoading
+    val error = vm.errorMessage
+    val success = vm.successMessage
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+
         Text("Contacto", style = MaterialTheme.typography.headlineSmall)
 
         OutlinedTextField(
-            value = s.nombre,
-            onValueChange = vm::onNombreChange,
+            value = vm.name,
+            onValueChange = { vm.name = it },
             label = { Text("Nombre") },
-            isError = s.errNombre != null,
-            supportingText = { s.errNombre?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
             modifier = Modifier.fillMaxWidth()
         )
+
         OutlinedTextField(
-            value = s.correo,
-            onValueChange = vm::onCorreoChange,
+            value = vm.email,
+            onValueChange = { vm.email = it },
             label = { Text("Correo") },
-            isError = s.errCorreo != null,
-            supportingText = { s.errCorreo?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
             modifier = Modifier.fillMaxWidth()
         )
+
         OutlinedTextField(
-            value = s.mensaje,
-            onValueChange = vm::onMensajeChange,
+            value = vm.phone,
+            onValueChange = { vm.phone = it },
+            label = { Text("Teléfono (opcional)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = vm.serviceType,
+            onValueChange = { vm.serviceType = it },
+            label = { Text("Tipo de servicio (opcional)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = vm.imageUrl,
+            onValueChange = { vm.imageUrl = it },
+            label = { Text("Imagen URL (opcional)") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        OutlinedTextField(
+            value = vm.message,
+            onValueChange = { vm.message = it },
             label = { Text("Mensaje") },
-            isError = s.errMensaje != null,
-            supportingText = { s.errMensaje?.let { Text(it, color = MaterialTheme.colorScheme.error) } },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(140.dp)
         )
-        Button(onClick = vm::submit, modifier = Modifier.fillMaxWidth()) {
-            Text("Enviar")
+
+        Button(
+            onClick = vm::enviarContacto,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !isLoading
+        ) {
+            Text(if (isLoading) "Enviando..." else "Enviar")
         }
 
-        if (s.enviado) {
-            AssistChip(onClick = vm::reset, label = { Text("¡Mensaje enviado! Toca para limpiar.") })
+        // Mostrar errores
+        error?.let {
+            Text(it, color = MaterialTheme.colorScheme.error)
         }
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)) {
-            Button(onClick = {
-                ctx.startActivity(Intent(Intent.ACTION_DIAL, Uri.parse("tel:+56912345678")))
-            }) { Text("Llamar") }
 
-            Button(onClick = {
-                val gmm = Uri.parse("geo:-33.437,-70.650?q=Charme+et+Chic")
-                ctx.startActivity(Intent(Intent.ACTION_VIEW, gmm))
-            }) { Text("Cómo llegar") }
+        // Mostrar éxito
+        success?.let {
+            Text(it, color = MaterialTheme.colorScheme.primary)
         }
     }
-    }
+}

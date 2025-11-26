@@ -15,9 +15,12 @@ class ContactViewModel(
     // Campos del formulario
     var name by mutableStateOf("")
     var email by mutableStateOf("")
+    var phone by mutableStateOf("")
     var message by mutableStateOf("")
+    var serviceType by mutableStateOf("")
+    var imageUrl by mutableStateOf("")
 
-    // Estados de la UI
+    // Estados de UI
     var isLoading by mutableStateOf(false)
         private set
 
@@ -27,8 +30,6 @@ class ContactViewModel(
     var successMessage by mutableStateOf<String?>(null)
         private set
 
-
-    // ⭐ Validaciones simples
     private fun validate(): Boolean {
         if (name.isBlank()) {
             errorMessage = "El nombre es obligatorio"
@@ -42,12 +43,9 @@ class ContactViewModel(
             errorMessage = "El mensaje no puede estar vacío"
             return false
         }
-
         return true
     }
 
-
-    // ⭐ Función principal: enviar el formulario
     fun enviarContacto() {
         if (!validate()) return
 
@@ -58,14 +56,17 @@ class ContactViewModel(
                 successMessage = null
 
                 val request = ContactRequest(
-                    nombre = name,
+                    name = name,
                     email = email,
-                    mensaje = message
+                    phone = phone.ifBlank { null },
+                    message = message,
+                    serviceType = serviceType.ifBlank { null },
+                    imageUrl = imageUrl.ifBlank { null }
                 )
 
                 val response: ContactResponse = repository.enviarContacto(request)
 
-                successMessage = response.message ?: "Enviado correctamente."
+                successMessage = response.message ?: "Mensaje enviado correctamente."
 
             } catch (e: Exception) {
                 errorMessage = "Error al enviar: ${e.message}"

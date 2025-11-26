@@ -6,7 +6,5 @@ data class Product(
     val precio: Double,
     val categoria: String,
     val imagenUrl: String? = null,
-
-    // Campo extra opcional para imágenes locales
     val imageRes: Int? = null
 )
