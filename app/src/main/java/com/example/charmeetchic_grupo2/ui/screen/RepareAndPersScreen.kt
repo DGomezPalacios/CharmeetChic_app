@@ -1,3 +1,4 @@
+/*
 package com.example.charmeetchic_grupo2.ui.screen
 
 import android.net.Uri
@@ -258,3 +259,4 @@ fun RepareAndPersScreen(
         }
     }
 }
+*/

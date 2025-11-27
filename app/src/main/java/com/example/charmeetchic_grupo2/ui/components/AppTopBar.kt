@@ -20,7 +20,7 @@ fun AppTopBar(
     onGoHome: () -> Unit,
     onGoCatalog: () -> Unit,
     onGoCart: () -> Unit,
-    onGoRepare: () -> Unit,
+/*    onGoRepare: () -> Unit,*/
     onGoAbout: () -> Unit,
     onGoContact: () -> Unit,
     onGoLogin: () -> Unit,
@@ -63,11 +63,11 @@ fun AppTopBar(
                     onClick = { showMenu = false; onGoCatalog() }
                 )
 
-                DropdownMenuItem(
+/*                DropdownMenuItem(
                     text = { Text("Reparar y Personalizar") },
                     leadingIcon = { Icon(Icons.Default.Build, null) },
                     onClick = { showMenu = false; onGoRepare() }
-                )
+                )*/
 
                 DropdownMenuItem(
                     text = { Text("Sobre nosotros") },
