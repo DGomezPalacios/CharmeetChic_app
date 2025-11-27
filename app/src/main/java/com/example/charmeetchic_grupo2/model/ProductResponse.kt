@@ -1,6 +1,4 @@
-package com.example.charmeetchic_grupo2.network.dto
-
-import com.example.charmeetchic_grupo2.model.Product
+package com.example.charmeetchic_grupo2.model
 
 data class ProductResponse(
     val id: Long,
@@ -14,13 +12,20 @@ data class ProductResponse(
     val categoriaId: Long
 )
 
+// Convertir DTO → Modelo local
 fun ProductResponse.toUI(): Product {
     return Product(
         id = id,
         nombre = nombre,
+        descripcion = descripcion,
         precio = precio,
-        categoria = categoriaId.toString(), // simple
+        stock = stock,
+        material = material,
+        peso = peso,
+        medidas = medidas,
+        categoriaId = categoriaId,
         imagenUrl = null,
         imageRes = null
     )
 }
+

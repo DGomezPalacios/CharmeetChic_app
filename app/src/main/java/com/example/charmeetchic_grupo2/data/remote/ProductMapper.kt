@@ -1,13 +1,18 @@
 package com.example.charmeetchic_grupo2.data.remote
 
 import com.example.charmeetchic_grupo2.model.Product
+import com.example.charmeetchic_grupo2.model.ProductResponse
 
-// Extensión que convierte ProductResponse en Product (modelo local)
+// Extension que convierte ProductResponse → Product (modelo local)
 fun ProductResponse.toProduct(): Product =
     Product(
-        id = id,                // Long ✔
-        nombre = nombre,        // String ✔
-        precio = precio,        // Double ✔
-        categoria = categoria,  // String ✔
-        imagenUrl = imagenUrl   // String? ✔
+        id = id,
+        nombre = nombre,
+        descripcion = descripcion,
+        precio = precio,
+        stock = stock,
+        material = material,
+        peso = peso,
+        medidas = medidas,
+        categoriaId = categoriaId
     )

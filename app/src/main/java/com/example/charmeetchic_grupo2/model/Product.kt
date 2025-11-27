@@ -3,8 +3,13 @@ package com.example.charmeetchic_grupo2.model
 data class Product(
     val id: Long,
     val nombre: String,
+    val descripcion: String,
     val precio: Double,
-    val categoria: String,
+    val stock: Int,
+    val material: String,
+    val peso: Double,
+    val medidas: String,
+    val categoriaId: Long,
     val imagenUrl: String? = null,
     val imageRes: Int? = null
 )
