@@ -10,15 +10,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.charmeetchic_grupo2.ui.components.AppTopBar
 import com.example.charmeetchic_grupo2.ui.screen.*
+import com.example.charmeetchic_grupo2.viewmodel.AuthViewModel
 import com.example.charmeetchic_grupo2.viewmodel.CartViewModel
 
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
-    cartVM: CartViewModel  // 🔹 ViewModel compartido del carrito
+    cartVM: CartViewModel,
+    authVM: AuthViewModel       // 👈 AÑADIDO
 ) {
 
-    // Contador del carrito
+    // 🔹 TOP BAR COMPARTIDO
     fun topBar() = @Composable {
         AppTopBar(
             onGoHome = { navController.navigate(Routes.Home.route) },
@@ -27,17 +29,25 @@ fun AppNavGraph(
             onGoRepare = { navController.navigate(Routes.RepareAndPers.route) },
             onGoAbout = { navController.navigate(Routes.About.route) },
             onGoContact = { navController.navigate(Routes.Contact.route) },
+
             onGoLogin = { navController.navigate(Routes.Login.route) },
             onGoRegister = { navController.navigate(Routes.Register.route) },
-            cartVM = cartVM   // ✅ <-- ESTA es la línea clave para el contador
+
+            // 👇 NUEVO PARA ADMIN
+            onGoAdmin = { navController.navigate(Routes.AdminProducts.route) },
+            isAdmin = authVM.isAdmin,
+
+            cartVM = cartVM
         )
     }
 
+    // 🔹 GESTOR DE RUTAS
     NavHost(
         navController = navController,
         startDestination = Routes.Home.route
     ) {
-        // HOME
+
+        // 🔸 HOME
         composable(Routes.Home.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -49,7 +59,7 @@ fun AppNavGraph(
             }
         }
 
-        // CATALOG
+        // 🔸 CATALOGO
         composable(Routes.Catalog.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -58,7 +68,7 @@ fun AppNavGraph(
             }
         }
 
-        // CART
+        // 🔸 CARRITO
         composable(Routes.Cart.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -67,7 +77,7 @@ fun AppNavGraph(
             }
         }
 
-        // REPARE AND PERS
+        // 🔸 REPARAR Y PERSONALIZAR
         composable(Routes.RepareAndPers.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -79,7 +89,7 @@ fun AppNavGraph(
             }
         }
 
-        // ABOUT US
+        // 🔸 ABOUT US
         composable(Routes.About.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -88,7 +98,7 @@ fun AppNavGraph(
             }
         }
 
-        // CONTACT
+        // 🔸 CONTACTO
         composable(Routes.Contact.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -97,7 +107,7 @@ fun AppNavGraph(
             }
         }
 
-        // LOGIN
+        // 🔸 LOGIN
         composable(Routes.Login.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -109,7 +119,7 @@ fun AppNavGraph(
             }
         }
 
-        // REGISTER
+        // 🔸 REGISTER
         composable(Routes.Register.route) {
             Scaffold(topBar = topBar()) { innerPadding ->
                 Box(Modifier.padding(innerPadding)) {
@@ -117,6 +127,20 @@ fun AppNavGraph(
                         onGoLogin = { navController.navigate(Routes.Login.route) },
                         onRegisterOk = { navController.navigate(Routes.Home.route) }
                     )
+                }
+            }
+        }
+
+        // 🔥🔒 RUTA ADMIN PROTEGIDA
+        composable(Routes.AdminProducts.route) {
+            Scaffold(topBar = topBar()) { innerPadding ->
+                Box(Modifier.padding(innerPadding)) {
+
+                    if (authVM.isAdmin) {
+                        AdminProductScreen()
+                    } else {
+                        UnauthorizedScreen()   // 👈 te creo una pantallita básica si quieres
+                    }
                 }
             }
         }

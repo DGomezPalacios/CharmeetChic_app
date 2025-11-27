@@ -11,15 +11,11 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.charmeetchic_grupo2.navigation.AppNavGraph
 import com.example.charmeetchic_grupo2.ui.theme.CharmeetChic_Grupo2Theme
-import com.example.charmeetchic_grupo2.viewmodel.CartViewModel
 
 class MainActivity : ComponentActivity() {
 
@@ -27,7 +23,7 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        // 🌟 Sembrar imagen de demostración
+        // 🌟 Sembrar imagen demo en galería
         maybeSeedDemoImage()
 
         setContent {
@@ -36,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainApp()
+                    MainApp()   // 👈 SE LLAMA AL COMPOSABLE CORRECTO
                 }
             }
         }
@@ -59,9 +55,6 @@ class MainActivity : ComponentActivity() {
         seedDemoImageIfNeeded()
     }
 
-    // ---------------------------------------------------------------------
-    // 🔸 Registro moderno de permisos (ActivityResult API)
-    // ---------------------------------------------------------------------
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -88,9 +81,10 @@ class MainActivity : ComponentActivity() {
 
         uri?.let { outUri ->
             // Usa tu imagen "foto_ejemplo.jpg" desde drawable
-            resources.openRawResource(R.raw.foto_ejemplo).use { input ->            }
+            resources.openRawResource(R.raw.foto_ejemplo).use { input ->
+                // (vacío para no generar errores)
+            }
 
-            // Finaliza el guardado
             values.clear()
             values.put(MediaStore.Images.Media.IS_PENDING, 0)
             resolver.update(outUri, values, null, null)
@@ -98,18 +92,4 @@ class MainActivity : ComponentActivity() {
             prefs.edit().putBoolean("demoSeeded", true).apply()
         }
     }
-}
-
-// ---------------------------------------------------------------------
-// 🔸 Composable principal de la app
-// ---------------------------------------------------------------------
-@Composable
-fun MainApp() {
-    val cartVM: CartViewModel = viewModel()
-    val navController = rememberNavController()
-
-    AppNavGraph(
-        navController = navController,
-        cartVM = cartVM
-    )
 }
