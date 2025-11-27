@@ -22,7 +22,9 @@ fun AppNavGraph(
             onGoHome = { navController.navigate(Routes.Home.route) },
             onGoCatalog = { navController.navigate(Routes.Catalog.route) },
             onGoCart = { navController.navigate(Routes.Cart.route) },
+/*
             onGoRepare = { navController.navigate(Routes.RepareAndPers.route) },
+*/
             onGoAbout = { navController.navigate(Routes.About.route) },
             onGoContact = { navController.navigate(Routes.Contact.route) },
             onGoLogin = { navController.navigate(Routes.Login.route) },
@@ -64,7 +66,7 @@ fun AppNavGraph(
             }
         }
 
-        composable(Routes.RepareAndPers.route) {
+/*        composable(Routes.RepareAndPers.route) {
             Scaffold(topBar = topBar()) { padding ->
                 Box(Modifier.padding(padding)) {
                     RepareAndPersScreen(
@@ -73,7 +75,7 @@ fun AppNavGraph(
                     )
                 }
             }
-        }
+        }*/
 
         composable(Routes.About.route) {
             Scaffold(topBar = topBar()) { padding ->
