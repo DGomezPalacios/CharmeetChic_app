@@ -1,6 +1,6 @@
 package com.example.charmeetchic_grupo2.network
 
-import com.example.charmeetchic_grupo2.model.ProductResponse
+import com.example.charmeetchic_grupo2.data.remote.ProductResponse
 import com.example.charmeetchic_grupo2.model.ProductRequest
 import retrofit2.http.*
 

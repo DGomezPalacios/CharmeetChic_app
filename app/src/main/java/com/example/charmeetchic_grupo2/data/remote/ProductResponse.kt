@@ -1,4 +1,7 @@
-package com.example.charmeetchic_grupo2.model
+package com.example.charmeetchic_grupo2.data.remote
+
+import com.example.charmeetchic_grupo2.R
+import com.example.charmeetchic_grupo2.model.Product
 
 data class ProductResponse(
     val id: Long,
@@ -25,7 +28,18 @@ fun ProductResponse.toUI(): Product {
         medidas = medidas,
         categoriaId = categoriaId,
         imagenUrl = null,
-        imageRes = null
+        imageRes = when {
+            nombre.contains("collar", ignoreCase = true) &&
+                    nombre.contains("minimalista", ignoreCase = true) ->
+                R.drawable.collar_dorado_minimalista
+
+            nombre.contains("aros", ignoreCase = true) &&
+                    nombre.contains("vintage", ignoreCase = true) ->
+                R.drawable.aros_perla_vintage
+
+            else -> null
+        }
+
     )
 }
 
