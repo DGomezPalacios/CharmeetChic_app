@@ -27,8 +27,10 @@ class ProductViewModel : ViewModel() {
                 errorMessage = null
                 productList = repository.getAllProducts()   // Retrofit
             } catch (e: Exception) {
-                errorMessage = "Error al cargar productos"
-            } finally {
+                errorMessage = "Error al cargar productos: ${e.message}"
+                e.printStackTrace()
+            }
+            finally {
                 isLoading = false
             }
         }
