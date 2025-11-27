@@ -1,4 +1,5 @@
 package com.example.charmeetchic_grupo2.model
+import com.example.charmeetchic_grupo2.data.remote.*
 
 data class Product(
     val id: Long,
