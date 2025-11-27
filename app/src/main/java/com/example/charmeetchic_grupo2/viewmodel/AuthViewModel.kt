@@ -53,21 +53,17 @@ class AuthViewModel : ViewModel() {
             isLoading = true
             errorMessage = null
             loginSuccess = false
-            isAdmin = false    // reset
 
-            // Simulación (API futuro)
-            val request = LoginRequest(email, password)
-            delay(1000)
+            delay(700)
 
-            // REGLA: usuario admin fijo
-            if (email == "admin@admin.com" && password == "admin123") {
-                isAdmin = true
-            }
+            // ADMIN PARA AHORA
+            isAdmin = (email == "admin@chic.com" && password == "123456")
 
             loginSuccess = true
             isLoading = false
         }
     }
+
 
     fun register(name: String, email: String, password: String) {
         this.name = name

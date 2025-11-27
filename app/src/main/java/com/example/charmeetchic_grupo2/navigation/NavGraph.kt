@@ -10,17 +10,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.charmeetchic_grupo2.ui.components.AppTopBar
 import com.example.charmeetchic_grupo2.ui.screen.*
-import com.example.charmeetchic_grupo2.viewmodel.AuthViewModel
 import com.example.charmeetchic_grupo2.viewmodel.CartViewModel
 
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
-    cartVM: CartViewModel,
-    authVM: AuthViewModel       // 👈 AÑADIDO
+    cartVM: CartViewModel
 ) {
-
-    // 🔹 TOP BAR COMPARTIDO
     fun topBar() = @Composable {
         AppTopBar(
             onGoHome = { navController.navigate(Routes.Home.route) },
@@ -29,28 +25,21 @@ fun AppNavGraph(
             onGoRepare = { navController.navigate(Routes.RepareAndPers.route) },
             onGoAbout = { navController.navigate(Routes.About.route) },
             onGoContact = { navController.navigate(Routes.Contact.route) },
-
             onGoLogin = { navController.navigate(Routes.Login.route) },
             onGoRegister = { navController.navigate(Routes.Register.route) },
-
-            // 👇 NUEVO PARA ADMIN
             onGoAdmin = { navController.navigate(Routes.AdminProducts.route) },
-            isAdmin = authVM.isAdmin,
-
             cartVM = cartVM
         )
     }
 
-    // 🔹 GESTOR DE RUTAS
     NavHost(
         navController = navController,
         startDestination = Routes.Home.route
     ) {
 
-        // 🔸 HOME
         composable(Routes.Home.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     HomeScreen(
                         onGoCatalog = { navController.navigate(Routes.Catalog.route) },
                         onGoLogin = { navController.navigate(Routes.Login.route) }
@@ -59,58 +48,52 @@ fun AppNavGraph(
             }
         }
 
-        // 🔸 CATALOGO
         composable(Routes.Catalog.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     CatalogScreen(cartVM = cartVM)
                 }
             }
         }
 
-        // 🔸 CARRITO
         composable(Routes.Cart.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     CartScreen(cartVM = cartVM)
                 }
             }
         }
 
-        // 🔸 REPARAR Y PERSONALIZAR
         composable(Routes.RepareAndPers.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     RepareAndPersScreen(
                         onGoBack = { navController.popBackStack() },
-                        onSendRequest = { }
+                        onSendRequest = {}
                     )
                 }
             }
         }
 
-        // 🔸 ABOUT US
         composable(Routes.About.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     AboutUsScreen()
                 }
             }
         }
 
-        // 🔸 CONTACTO
         composable(Routes.Contact.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     ContactScreen()
                 }
             }
         }
 
-        // 🔸 LOGIN
         composable(Routes.Login.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     LoginScreen(
                         onLoginOk = { navController.navigate(Routes.Home.route) },
                         onGoRegister = { navController.navigate(Routes.Register.route) }
@@ -119,10 +102,9 @@ fun AppNavGraph(
             }
         }
 
-        // 🔸 REGISTER
         composable(Routes.Register.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     RegistrationScreen(
                         onGoLogin = { navController.navigate(Routes.Login.route) },
                         onRegisterOk = { navController.navigate(Routes.Home.route) }
@@ -131,19 +113,12 @@ fun AppNavGraph(
             }
         }
 
-        // 🔥🔒 RUTA ADMIN PROTEGIDA
         composable(Routes.AdminProducts.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
-
-                    if (authVM.isAdmin) {
-                        AdminProductScreen()
-                    } else {
-                        UnauthorizedScreen()   // 👈 te creo una pantallita básica si quieres
-                    }
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
+                    AdminProductScreen()
                 }
             }
         }
     }
 }
-

@@ -25,10 +25,11 @@ fun AppTopBar(
     onGoContact: () -> Unit,
     onGoLogin: () -> Unit,
     onGoRegister: () -> Unit,
-    cartVM: CartViewModel // 🔹 se recibe el ViewModel del carrito
+    onGoAdmin: () -> Unit,   // 👈 Admin SIEMPRE visible
+    cartVM: CartViewModel
 ) {
     var showMenu by remember { mutableStateOf(false) }
-    val cartState by cartVM.state.collectAsState() // 🔹 obtener el estado actual del carrito
+    val cartState by cartVM.state.collectAsState()
 
     CenterAlignedTopAppBar(
         title = {
@@ -36,70 +37,81 @@ fun AppTopBar(
                 text = "✨ Charme et Chic ✨",
                 modifier = Modifier.clickable { onGoHome() },
                 style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.onBackground
+                fontWeight = FontWeight.SemiBold
             )
         },
+
         navigationIcon = {
             IconButton(onClick = { showMenu = !showMenu }) {
-                Icon(Icons.Default.Menu, contentDescription = "Menú principal")
+                Icon(Icons.Default.Menu, "Menú principal")
             }
 
             DropdownMenu(
                 expanded = showMenu,
                 onDismissRequest = { showMenu = false }
             ) {
+
                 DropdownMenuItem(
                     text = { Text("Inicio") },
-                    leadingIcon = { Icon(Icons.Default.Home, contentDescription = null) },
+                    leadingIcon = { Icon(Icons.Default.Home, null) },
                     onClick = { showMenu = false; onGoHome() }
                 )
+
                 DropdownMenuItem(
                     text = { Text("Catálogo") },
-                    leadingIcon = { Icon(Icons.Default.Storefront, contentDescription = null) },
+                    leadingIcon = { Icon(Icons.Default.Storefront, null) },
                     onClick = { showMenu = false; onGoCatalog() }
                 )
+
                 DropdownMenuItem(
                     text = { Text("Reparar y Personalizar") },
-                    leadingIcon = { Icon(Icons.Default.Build, contentDescription = null) },
+                    leadingIcon = { Icon(Icons.Default.Build, null) },
                     onClick = { showMenu = false; onGoRepare() }
                 )
+
                 DropdownMenuItem(
                     text = { Text("Sobre nosotros") },
-                    leadingIcon = { Icon(Icons.Default.Info, contentDescription = null) },
+                    leadingIcon = { Icon(Icons.Default.Info, null) },
                     onClick = { showMenu = false; onGoAbout() }
                 )
+
                 DropdownMenuItem(
                     text = { Text("Contacto") },
-                    leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
+                    leadingIcon = { Icon(Icons.Default.Email, null) },
                     onClick = { showMenu = false; onGoContact() }
+                )
+
+                HorizontalDivider()
+
+                // ⭐ ADMIN SIEMPRE VISIBLE (sin Auth)
+                DropdownMenuItem(
+                    text = { Text("Administrar productos") },
+                    leadingIcon = { Icon(Icons.Default.Settings, null) },
+                    onClick = { showMenu = false; onGoAdmin() }
                 )
 
                 HorizontalDivider()
 
                 DropdownMenuItem(
                     text = { Text("Iniciar sesión") },
-                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.Login, contentDescription = null) },
+                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.Login, null) },
                     onClick = { showMenu = false; onGoLogin() }
                 )
+
                 DropdownMenuItem(
                     text = { Text("Registrarse") },
-                    leadingIcon = { Icon(Icons.Default.PersonAdd, contentDescription = null) },
+                    leadingIcon = { Icon(Icons.Default.PersonAdd, null) },
                     onClick = { showMenu = false; onGoRegister() }
                 )
             }
         },
+
         actions = {
-            // 🛒 Ícono del carrito con contador
             Box {
                 IconButton(onClick = onGoCart) {
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = "Carrito de compras"
-                    )
+                    Icon(Icons.Default.ShoppingCart, "Carrito")
                 }
 
-                // 🔹 Mostrar número solo si hay productos
                 if (cartState.items.isNotEmpty()) {
                     Box(
                         modifier = Modifier
@@ -109,7 +121,7 @@ fun AppTopBar(
                     ) {
                         Surface(
                             shape = MaterialTheme.shapes.small,
-                            color = Color(0xFF333333) // gris oscuro (mejor contraste)
+                            color = Color.DarkGray
                         ) {
                             Text(
                                 text = cartState.items.size.toString(),
