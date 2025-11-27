@@ -8,5 +8,6 @@ data class ProductRequest(
     val material: String?,
     val peso: Double?,
     val medidas: String?,
-    val categoriaId: Long
+    val categoriaId: Long,
+    val imagenUrl: String? = null
 )

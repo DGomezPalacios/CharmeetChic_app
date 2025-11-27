@@ -15,10 +15,8 @@ import com.example.charmeetchic_grupo2.viewmodel.CartViewModel
 @Composable
 fun AppNavGraph(
     navController: NavHostController,
-    cartVM: CartViewModel  // 🔹 ViewModel compartido del carrito
+    cartVM: CartViewModel
 ) {
-
-    // Contador del carrito
     fun topBar() = @Composable {
         AppTopBar(
             onGoHome = { navController.navigate(Routes.Home.route) },
@@ -29,7 +27,8 @@ fun AppNavGraph(
             onGoContact = { navController.navigate(Routes.Contact.route) },
             onGoLogin = { navController.navigate(Routes.Login.route) },
             onGoRegister = { navController.navigate(Routes.Register.route) },
-            cartVM = cartVM   // ✅ <-- ESTA es la línea clave para el contador
+            onGoAdmin = { navController.navigate(Routes.AdminProducts.route) },
+            cartVM = cartVM
         )
     }
 
@@ -37,10 +36,10 @@ fun AppNavGraph(
         navController = navController,
         startDestination = Routes.Home.route
     ) {
-        // HOME
+
         composable(Routes.Home.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     HomeScreen(
                         onGoCatalog = { navController.navigate(Routes.Catalog.route) },
                         onGoLogin = { navController.navigate(Routes.Login.route) }
@@ -49,58 +48,52 @@ fun AppNavGraph(
             }
         }
 
-        // CATALOG
         composable(Routes.Catalog.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     CatalogScreen(cartVM = cartVM)
                 }
             }
         }
 
-        // CART
         composable(Routes.Cart.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     CartScreen(cartVM = cartVM)
                 }
             }
         }
 
-        // REPARE AND PERS
         composable(Routes.RepareAndPers.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     RepareAndPersScreen(
                         onGoBack = { navController.popBackStack() },
-                        onSendRequest = { }
+                        onSendRequest = {}
                     )
                 }
             }
         }
 
-        // ABOUT US
         composable(Routes.About.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     AboutUsScreen()
                 }
             }
         }
 
-        // CONTACT
         composable(Routes.Contact.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     ContactScreen()
                 }
             }
         }
 
-        // LOGIN
         composable(Routes.Login.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     LoginScreen(
                         onLoginOk = { navController.navigate(Routes.Home.route) },
                         onGoRegister = { navController.navigate(Routes.Register.route) }
@@ -109,10 +102,9 @@ fun AppNavGraph(
             }
         }
 
-        // REGISTER
         composable(Routes.Register.route) {
-            Scaffold(topBar = topBar()) { innerPadding ->
-                Box(Modifier.padding(innerPadding)) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
                     RegistrationScreen(
                         onGoLogin = { navController.navigate(Routes.Login.route) },
                         onRegisterOk = { navController.navigate(Routes.Home.route) }
@@ -120,6 +112,13 @@ fun AppNavGraph(
                 }
             }
         }
+
+        composable(Routes.AdminProducts.route) {
+            Scaffold(topBar = topBar()) { padding ->
+                Box(Modifier.padding(padding)) {
+                    AdminProductScreen()
+                }
+            }
+        }
     }
 }
-

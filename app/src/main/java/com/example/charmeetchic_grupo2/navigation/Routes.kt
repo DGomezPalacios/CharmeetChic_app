@@ -17,4 +17,7 @@ sealed class Routes(val route: String) {
     // 📞 Información y contacto
     object About : Routes("about")
     object Contact : Routes("contact")
+
+    //Admin}
+    object AdminProducts : Routes ("admin_products")
 }

@@ -9,9 +9,9 @@ data class ProductResponse(
     val descripcion: String,
     val precio: Double,
     val stock: Int,
-    val material: String?,   // <--- OPCIONAL
-    val peso: Double?,       // <--- OPCIONAL
-    val medidas: String?,    // <--- OPCIONAL
+    val material: String,
+    val peso: Double,
+    val medidas: String,
     val categoriaId: Long
 )
 

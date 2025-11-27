@@ -13,10 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.rememberNavController
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.charmeetchic_grupo2.navigation.AppNavGraph
 import com.example.charmeetchic_grupo2.ui.theme.CharmeetChic_Grupo2Theme
 import com.example.charmeetchic_grupo2.viewmodel.CartViewModel
@@ -27,7 +27,6 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        // 🌟 Sembrar imagen de demostración
         maybeSeedDemoImage()
 
         setContent {
@@ -42,9 +41,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    // ---------------------------------------------------------------------
-    // 🔸 Función para verificar permisos y sembrar la imagen demo
-    // ---------------------------------------------------------------------
     private fun maybeSeedDemoImage() {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             val hasPermission = ContextCompat.checkSelfPermission(
@@ -59,18 +55,12 @@ class MainActivity : ComponentActivity() {
         seedDemoImageIfNeeded()
     }
 
-    // ---------------------------------------------------------------------
-    // 🔸 Registro moderno de permisos (ActivityResult API)
-    // ---------------------------------------------------------------------
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
         if (isGranted) seedDemoImageIfNeeded()
     }
 
-    // ---------------------------------------------------------------------
-    // 🔸 Crea una imagen en la galería desde drawable (solo una vez)
-    // ---------------------------------------------------------------------
     private fun seedDemoImageIfNeeded() {
         val prefs = getSharedPreferences("seed", MODE_PRIVATE)
         if (prefs.getBoolean("demoSeeded", false)) return
@@ -86,23 +76,16 @@ class MainActivity : ComponentActivity() {
         val resolver = contentResolver
         val uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
 
-        uri?.let { outUri ->
-            // Usa tu imagen "foto_ejemplo.jpg" desde drawable
-            resources.openRawResource(R.raw.foto_ejemplo).use { input ->            }
-
-            // Finaliza el guardado
+        uri?.let {
+            resources.openRawResource(R.raw.foto_ejemplo).use { }
             values.clear()
             values.put(MediaStore.Images.Media.IS_PENDING, 0)
-            resolver.update(outUri, values, null, null)
-
+            resolver.update(it, values, null, null)
             prefs.edit().putBoolean("demoSeeded", true).apply()
         }
     }
 }
 
-// ---------------------------------------------------------------------
-// 🔸 Composable principal de la app
-// ---------------------------------------------------------------------
 @Composable
 fun MainApp() {
     val cartVM: CartViewModel = viewModel()
