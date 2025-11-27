@@ -12,6 +12,11 @@ interface ProductApi {
     @GET("productos/{id}")
     suspend fun getProductById(@Path("id") id: Long): ProductResponse
 
+    @GET("productos/buscar")
+    suspend fun searchProducts(
+        @Query("nombre") nombre: String
+    ): List<ProductResponse>
+
     @POST("productos")
     suspend fun createProduct(@Body request: ProductRequest): ProductResponse
 

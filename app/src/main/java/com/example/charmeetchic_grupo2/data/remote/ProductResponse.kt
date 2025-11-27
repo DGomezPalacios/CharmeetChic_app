@@ -9,13 +9,12 @@ data class ProductResponse(
     val descripcion: String,
     val precio: Double,
     val stock: Int,
-    val material: String,
-    val peso: Double,
-    val medidas: String,
+    val material: String?,   // <--- OPCIONAL
+    val peso: Double?,       // <--- OPCIONAL
+    val medidas: String?,    // <--- OPCIONAL
     val categoriaId: Long
 )
 
-// Convertir DTO → Modelo local
 fun ProductResponse.toUI(): Product {
     return Product(
         id = id,
@@ -27,24 +26,25 @@ fun ProductResponse.toUI(): Product {
         peso = peso,
         medidas = medidas,
         categoriaId = categoriaId,
-        imagenUrl = null,
+
+        // Imagen por URL (si viene del backend)
+        imagenUrl = null,     // <--- por ahora null, luego lo activamos
+
+        // Imagen local automática
         imageRes = run {
-            val nombreLower = nombre.lowercase()
+            val n = nombre.lowercase()
 
             when {
-                nombreLower.contains("collar") &&
-                        nombreLower.contains("minimalista") ->
+                n.contains("collar") && n.contains("minimalista") ->
                     R.drawable.collar_dorado_minimalista
 
-                nombreLower.contains("aros") &&
-                        nombreLower.contains("vintage") ->
+                n.contains("aros") && n.contains("vintage") ->
                     R.drawable.aros_perla_vintage
 
                 else -> null
             }
         }
-
-
     )
 }
+
 
