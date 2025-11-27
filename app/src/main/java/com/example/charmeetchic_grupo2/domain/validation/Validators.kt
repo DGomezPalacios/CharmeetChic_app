@@ -30,3 +30,17 @@ fun validatePhoneDigitsOnly(phone: String, minLen: Int = 9): String? {
 // Valida que no esté vacío
 fun validateNotEmpty(text: String): String? =
     if (text.isBlank()) "Campo obligatorio" else null
+
+// link opcional en caso de no estar vacio
+fun validateOptionalUrl(url: String): String? {
+    if (url.isBlank()) return null
+    val ok = Patterns.WEB_URL.matcher(url).matches()
+    return if (!ok) "URL inválida" else null
+}
+
+// mensaje obligatorio
+fun validateMessageMin5(msg: String): String? {
+    if (msg.isBlank()) return "El mensaje es obligatorio"
+    if (msg.length < 5) return "Debe tener al menos 5 caracteres"
+    return null
+}

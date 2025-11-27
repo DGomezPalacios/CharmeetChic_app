@@ -1,6 +1,8 @@
 package com.example.charmeetchic_grupo2.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -11,79 +13,125 @@ import com.example.charmeetchic_grupo2.viewmodel.ContactViewModel
 @Composable
 fun ContactScreen(vm: ContactViewModel = viewModel()) {
 
-    val isLoading = vm.isLoading
-    val error = vm.errorMessage
-    val success = vm.successMessage
+    val state = vm.state
+    val scroll = rememberScrollState()
 
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+            .padding(20.dp)
+            .verticalScroll(scroll),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        Text("Contacto", style = MaterialTheme.typography.headlineSmall)
+        Text(
+            text = "Contacto",
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.primary
+        )
 
+        /* -------------------------
+         *   Nombre
+         * ------------------------- */
         OutlinedTextField(
-            value = vm.name,
-            onValueChange = { vm.name = it },
+            value = state.name,
+            onValueChange = vm::onNameChange,
             label = { Text("Nombre") },
+            isError = state.errName != null,
             modifier = Modifier.fillMaxWidth()
         )
+        state.errName?.let {
+            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+        }
 
+        /* -------------------------
+         *   Email
+         * ------------------------- */
         OutlinedTextField(
-            value = vm.email,
-            onValueChange = { vm.email = it },
-            label = { Text("Correo") },
+            value = state.email,
+            onValueChange = vm::onEmailChange,
+            label = { Text("Correo electrónico") },
+            isError = state.errEmail != null,
             modifier = Modifier.fillMaxWidth()
         )
+        state.errEmail?.let {
+            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+        }
 
+        /* -------------------------
+         *   Teléfono
+         * ------------------------- */
         OutlinedTextField(
-            value = vm.phone,
-            onValueChange = { vm.phone = it },
-            label = { Text("Teléfono (opcional)") },
+            value = state.phone,
+            onValueChange = vm::onPhoneChange,
+            label = { Text("Teléfono") },
+            isError = state.errPhone != null,
             modifier = Modifier.fillMaxWidth()
         )
+        state.errPhone?.let {
+            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+        }
 
+        /* -------------------------
+         *   Tipo de servicio
+         * ------------------------- */
         OutlinedTextField(
-            value = vm.serviceType,
-            onValueChange = { vm.serviceType = it },
+            value = state.serviceType,
+            onValueChange = vm::onServiceTypeChange,
             label = { Text("Tipo de servicio (opcional)") },
             modifier = Modifier.fillMaxWidth()
         )
 
+        /* -------------------------
+         *   Imagen URL
+         * ------------------------- */
         OutlinedTextField(
-            value = vm.imageUrl,
-            onValueChange = { vm.imageUrl = it },
+            value = state.imageUrl,
+            onValueChange = vm::onImageUrlChange,
             label = { Text("Imagen URL (opcional)") },
+            isError = state.errImageUrl != null,
             modifier = Modifier.fillMaxWidth()
         )
+        state.errImageUrl?.let {
+            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+        }
 
+        /* -------------------------
+         *   Mensaje
+         * ------------------------- */
         OutlinedTextField(
-            value = vm.message,
-            onValueChange = { vm.message = it },
+            value = state.message,
+            onValueChange = vm::onMessageChange,
             label = { Text("Mensaje") },
+            isError = state.errMessage != null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(140.dp)
+                .height(150.dp)
         )
+        state.errMessage?.let {
+            Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+        }
 
+        /* -------------------------
+         *   Botón Enviar
+         * ------------------------- */
         Button(
             onClick = vm::enviarContacto,
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = !state.isLoading
         ) {
-            Text(if (isLoading) "Enviando..." else "Enviar")
+            Text(if (state.isLoading) "Enviando..." else "Enviar")
         }
 
-        // Mostrar errores
-        error?.let {
-            Text(it, color = MaterialTheme.colorScheme.error)
-        }
-
-        // Mostrar éxito
-        success?.let {
-            Text(it, color = MaterialTheme.colorScheme.primary)
+        /* -------------------------
+         *   Mensaje de éxito
+         * ------------------------- */
+        if (state.enviado) {
+            Text(
+                "Mensaje enviado correctamente.",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }

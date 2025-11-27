@@ -1,8 +1,11 @@
 package com.example.charmeetchic_grupo2.viewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.charmeetchic_grupo2.domain.validation.*
 import com.example.charmeetchic_grupo2.model.ContactRequest
 import com.example.charmeetchic_grupo2.model.ContactResponse
 import com.example.charmeetchic_grupo2.repository.ContactRepository
@@ -12,72 +15,121 @@ class ContactViewModel(
     private val repository: ContactRepository = ContactRepository()
 ) : ViewModel() {
 
-    // Campos del formulario
-    var name by mutableStateOf("")
-    var email by mutableStateOf("")
-    var phone by mutableStateOf("")
-    var message by mutableStateOf("")
-    var serviceType by mutableStateOf("")
-    var imageUrl by mutableStateOf("")
-
-    // Estados de UI
-    var isLoading by mutableStateOf(false)
+    // 🔥 ESTADO OBSERVABLE POR COMPOSE
+    var state by mutableStateOf(ContactState())
         private set
 
-    var errorMessage by mutableStateOf<String?>(null)
-        private set
+    /* ----------------------------------------------------
+     *  ACTUALIZADORES DE CAMPOS (validan en tiempo real)
+     * ---------------------------------------------------- */
 
-    var successMessage by mutableStateOf<String?>(null)
-        private set
-
-    private fun validate(): Boolean {
-        if (name.isBlank()) {
-            errorMessage = "El nombre es obligatorio"
-            return false
-        }
-        if (!email.contains("@")) {
-            errorMessage = "Correo inválido"
-            return false
-        }
-        if (message.isBlank()) {
-            errorMessage = "El mensaje no puede estar vacío"
-            return false
-        }
-        return true
+    fun onNameChange(value: String) {
+        state = state.copy(
+            name = value,
+            errName = validateNameLettersOnly(value)
+        )
     }
 
+    fun onEmailChange(value: String) {
+        state = state.copy(
+            email = value,
+            errEmail = validateEmail(value)
+        )
+    }
+
+    fun onPhoneChange(value: String) {
+        state = state.copy(
+            phone = value,
+            errPhone = validatePhoneDigitsOnly(value)
+        )
+    }
+
+    fun onMessageChange(value: String) {
+        state = state.copy(
+            message = value,
+            errMessage = validateMessageMin5(value)
+        )
+    }
+
+    fun onServiceTypeChange(value: String) {
+        state = state.copy(serviceType = value)
+    }
+
+    fun onImageUrlChange(value: String) {
+        state = state.copy(
+            imageUrl = value,
+            errImageUrl = validateOptionalUrl(value)
+        )
+    }
+
+
+    /* ----------------------------------------------------
+     *  VALIDACIÓN COMPLETA ANTES DE ENVIAR
+     * ---------------------------------------------------- */
+    private fun validateAll(): Boolean {
+        val errName = validateNameLettersOnly(state.name)
+        val errEmail = validateEmail(state.email)
+        val errPhone = validatePhoneDigitsOnly(state.phone)
+        val errMessage = validateMessageMin5(state.message)
+        val errImage = validateOptionalUrl(state.imageUrl)
+
+        state = state.copy(
+            errName = errName,
+            errEmail = errEmail,
+            errPhone = errPhone,
+            errMessage = errMessage,
+            errImageUrl = errImage
+        )
+
+        return listOf(errName, errEmail, errPhone, errMessage, errImage)
+            .all { it == null }
+    }
+
+
+    /* ----------------------------------------------------
+     *           ENVIAR FORMULARIO AL BACKEND
+     * ---------------------------------------------------- */
     fun enviarContacto() {
-        if (!validate()) return
+        if (!validateAll()) return
 
         viewModelScope.launch {
             try {
-                isLoading = true
-                errorMessage = null
-                successMessage = null
+                state = state.copy(
+                    isLoading = true,
+                    enviado = false
+                )
 
                 val request = ContactRequest(
-                    name = name,
-                    email = email,
-                    phone = phone.ifBlank { null },
-                    message = message,
-                    serviceType = serviceType.ifBlank { null },
-                    imageUrl = imageUrl.ifBlank { null }
+                    name = state.name,
+                    email = state.email,
+                    phone = state.phone.ifBlank { null },
+                    message = state.message,
+                    serviceType = state.serviceType.ifBlank { null },
+                    imageUrl = state.imageUrl.ifBlank { null }
                 )
 
                 val response: ContactResponse = repository.enviarContacto(request)
 
-                successMessage = response.message ?: "Mensaje enviado correctamente."
+                // éxito
+                state = state.copy(
+                    isLoading = false,
+                    enviado = true
+                )
 
             } catch (e: Exception) {
-                errorMessage = "Error al enviar: ${e.message}"
-            } finally {
-                isLoading = false
+                state = state.copy(
+                    isLoading = false,
+                    errMessage = "Error al enviar: ${e.message}"
+                )
             }
         }
     }
 
-    fun limpiarMensajes() {
-        errorMessage = null
-        successMessage = null
+
+    /* ----------------------------------------------------
+     *             RESET COMPLETO DEL FORMULARIO
+     * ---------------------------------------------------- */
+    fun resetForm() {
+        state = ContactState()
     }
 }
