@@ -22,4 +22,10 @@ interface ProductApi {
 
     @DELETE("productos/{id}")
     suspend fun deleteProduct(@Path("id") id: Long)
+    @PUT("productos/{id}")
+    suspend fun updateProduct(
+        @Path("id") id: Long,
+        @Body request: ProductRequest
+    ): ProductResponse
+
 }
