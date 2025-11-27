@@ -28,17 +28,22 @@ fun ProductResponse.toUI(): Product {
         medidas = medidas,
         categoriaId = categoriaId,
         imagenUrl = null,
-        imageRes = when {
-            nombre.contains("collar", ignoreCase = true) &&
-                    nombre.contains("minimalista", ignoreCase = true) ->
-                R.drawable.collar_dorado_minimalista
+        imageRes = run {
+            val nombreLower = nombre.lowercase()
 
-            nombre.contains("aros", ignoreCase = true) &&
-                    nombre.contains("vintage", ignoreCase = true) ->
-                R.drawable.aros_perla_vintage
+            when {
+                nombreLower.contains("collar") &&
+                        nombreLower.contains("minimalista") ->
+                    R.drawable.collar_dorado_minimalista
 
-            else -> null
+                nombreLower.contains("aros") &&
+                        nombreLower.contains("vintage") ->
+                    R.drawable.aros_perla_vintage
+
+                else -> null
+            }
         }
+
 
     )
 }
