@@ -7,9 +7,9 @@ import com.example.charmeetchic_grupo2.model.Product
 import com.example.charmeetchic_grupo2.repository.ProductRepository
 import kotlinx.coroutines.launch
 
-class ProductViewModel(
-    private val repo: ProductRepository = ProductRepository()
-) : ViewModel() {
+class ProductViewModel : ViewModel() {
+
+    private val repository = ProductRepository()
 
     var productList by mutableStateOf<List<Product>>(emptyList())
         private set
@@ -20,30 +20,14 @@ class ProductViewModel(
     var errorMessage by mutableStateOf<String?>(null)
         private set
 
-
     fun cargarProductos() {
         viewModelScope.launch {
             try {
                 isLoading = true
                 errorMessage = null
-                productList = repo.listarTodos()
+                productList = repository.getAllProducts()   // Retrofit
             } catch (e: Exception) {
-                errorMessage = "Error: ${e.message}"
-            } finally {
-                isLoading = false
-            }
-        }
-    }
-
-
-    fun buscar(q: String) {
-        viewModelScope.launch {
-            try {
-                isLoading = true
-                errorMessage = null
-                productList = repo.buscarPorNombre(q)
-            } catch (e: Exception) {
-                errorMessage = "Error: ${e.message}"
+                errorMessage = "Error al cargar productos"
             } finally {
                 isLoading = false
             }
