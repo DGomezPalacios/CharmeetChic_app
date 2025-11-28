@@ -3,6 +3,8 @@ package com.example.charmeetchic_grupo2.ui.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,7 +21,6 @@ fun AdminProductScreen(
     val isLoading = productVM.isLoading
     val error = productVM.errorMessage
 
-    // Campos del formulario (crear / editar)
     var nombre by remember { mutableStateOf("") }
     var precio by remember { mutableStateOf("") }
     var descripcion by remember { mutableStateOf("") }
@@ -30,27 +31,35 @@ fun AdminProductScreen(
     var categoriaId by remember { mutableStateOf("") }
     var editingId by remember { mutableStateOf<Long?>(null) }
 
-    // Cargar productos al entrar
     LaunchedEffect(Unit) { productVM.cargarProductos() }
 
-    Column(Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())   // 👈 HACE QUE TODO SE VEA
+    ) {
 
         Text("Administración de Productos", style = MaterialTheme.typography.titleLarge)
         Spacer(Modifier.height(16.dp))
 
-        // 🔄 Loading
         if (isLoading) {
             CircularProgressIndicator()
             return@Column
         }
 
-        // ❌ Error
         if (error != null) {
-            Text(text = error, color = MaterialTheme.colorScheme.error)
+            Text(error, color = MaterialTheme.colorScheme.error)
         }
 
-        // 📝 LISTA DE PRODUCTOS
-        LazyColumn(modifier = Modifier.fillMaxHeight(0.4f)) {
+        // -------------------------------
+        // LISTA DE PRODUCTOS
+        // -------------------------------
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(max = 300.dp),   // 👈 ALTURA LIMITADA, AHORA SI SE VE EL FORM
+            userScrollEnabled = true
+        ) {
             items(productos) { p ->
                 Card(
                     Modifier
@@ -69,7 +78,6 @@ fun AdminProductScreen(
                         }
 
                         Row {
-                            // ✏ EDITAR
                             TextButton(onClick = {
                                 editingId = p.id
                                 nombre = p.nombre
@@ -84,7 +92,6 @@ fun AdminProductScreen(
                                 Text("Editar")
                             }
 
-                            // ❌ ELIMINAR
                             TextButton(onClick = {
                                 productVM.eliminarProducto(p.id)
                             }) {
@@ -103,7 +110,6 @@ fun AdminProductScreen(
             style = MaterialTheme.typography.titleMedium
         )
 
-        // ⭐ FORMULARIO (COMÚN PARA CREAR / EDITAR)
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
 
             OutlinedTextField(value = nombre, onValueChange = { nombre = it }, label = { Text("Nombre") })
@@ -115,7 +121,6 @@ fun AdminProductScreen(
             OutlinedTextField(value = medidas, onValueChange = { medidas = it }, label = { Text("Medidas") })
             OutlinedTextField(value = categoriaId, onValueChange = { categoriaId = it }, label = { Text("ID Categoría") })
 
-            // BOTÓN PRINCIPAL (CREAR o EDITAR)
             Button(
                 onClick = {
                     val req = ProductRequest(
@@ -137,7 +142,6 @@ fun AdminProductScreen(
                         editingId = null
                     }
 
-                    // limpiar form
                     nombre = ""
                     precio = ""
                     descripcion = ""
