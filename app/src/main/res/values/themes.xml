@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.CharmeetChic" parent="Theme.Material3.Light.NoActionBar">
+    <!-- Tema base garantizado -->
+    <style name="Theme.CharmeetChic" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- colores opcionales -->
     </style>
 
+    <!-- Tema del SplashScreen -->
     <style name="Theme.CharmeetChic.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenAnimatedIcon">@drawable/charme_logo</item>
         <item name="windowSplashScreenBackground">@color/white</item>

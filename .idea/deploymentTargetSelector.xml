@@ -5,7 +5,10 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="catalogScreen_muestraTituloYProductos()">
+      <SelectionState runConfigName="CatalogScreenTest">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="CartScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

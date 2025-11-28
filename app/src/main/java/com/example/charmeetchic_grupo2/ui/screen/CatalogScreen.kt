@@ -17,9 +17,9 @@ fun CatalogScreen(
     cartVM: CartViewModel,
     productVM: ProductViewModel = viewModel()
 ) {
-    val productos = productVM.productList
-    val isLoading = productVM.isLoading
-    val error = productVM.errorMessage
+    val productos = productVM.productList.value
+    val isLoading = productVM.isLoading.value
+    val error = productVM.errorMessage.value
 
     LaunchedEffect(Unit) {
         productVM.cargarProductos()
@@ -31,7 +31,6 @@ fun CatalogScreen(
             .padding(16.dp)
     ) {
 
-        // 🔍 Búsqueda (opcional)
         var query by remember { mutableStateOf("") }
 
         OutlinedTextField(
@@ -43,27 +42,25 @@ fun CatalogScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // ⏳ Loading
         if (isLoading) {
             CircularProgressIndicator()
             return@Column
         }
 
-        // ❌ Error
         if (error != null) {
-            Text(text = error, color = MaterialTheme.colorScheme.error)
+            Text(error, color = MaterialTheme.colorScheme.error)
             return@Column
         }
 
-        // 🛒 Lista de productos
         LazyColumn {
             items(productos) { producto ->
-            ProductCard(
+                ProductCard(
                     product = producto,
                     onAddToCart = { cartVM.add(producto) }
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(Modifier.height(12.dp))
             }
         }
     }
 }
+

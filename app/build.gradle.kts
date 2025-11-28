@@ -18,6 +18,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:/Users/Daniela/Documents/DUOC/App Moviles/keystores/charmeetchic.jks")
+            storePassword = "charme2025"
+            keyAlias = "charme_key"
+            keyPassword = "charme2025"
+        }
+    }
 
     buildTypes {
         release {
@@ -26,6 +34,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
@@ -44,16 +53,22 @@ android {
 }
 
 dependencies {
-    // Jackpack Compose y Material 3
+
+    // --- APP ---
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.compose.material3:material3:1.3.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-    // Retrofit y Gson
+
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-    // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    implementation("androidx.navigation:navigation-compose:2.8.3")
+    implementation("androidx.compose.runtime:runtime-saveable:1.7.3")
+    implementation("com.google.android.material:material:1.12.0")
 
+
+    // Core + Compose
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -62,41 +77,28 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-
-    implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("androidx.navigation:navigation-compose:2.8.3")
-    implementation("androidx.compose.runtime:runtime-saveable:1.7.3")
-    implementation("androidx.compose.material:material-icons-extended:1.7.3")
-    implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.core:core-splashscreen:1.0.1")
+
+    // DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    // OkHttp
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
+    // Material Icons
+    implementation("androidx.compose.material:material-icons-extended:1.7.3")
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    // Kotest
-    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
-    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
-
-    // JUnit 5
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-
-    // MockK
-    testImplementation("io.mockk:mockk:1.13.10")
-
-    // Compose UI Test
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.2")
+    // --- DEBUG ---
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.2")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2")
-}
 
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
+    // ============================================================
+    // TEST UNITARIOS (src/test/java) -> SOLO JUNIT4
+    // ============================================================
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+
 }
