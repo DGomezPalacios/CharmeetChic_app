@@ -58,7 +58,7 @@ fun CatalogScreen(
         // 🛒 Lista de productos
         LazyColumn {
             items(productos) { producto ->
-                ProductCard(
+            ProductCard(
                     product = producto,
                     onAddToCart = { cartVM.add(producto) }
                 )

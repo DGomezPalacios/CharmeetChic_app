@@ -2,7 +2,7 @@ package com.example.charmeetchic_grupo2.repository
 
 import com.example.charmeetchic_grupo2.data.remote.CartApiService
 import com.example.charmeetchic_grupo2.data.remote.RetrofitInstance
-import com.example.charmeetchic_grupo2.model.Compras
+import com.example.charmeetchic_grupo2.model.CartResponse
 
 class CartRepository {
 
@@ -10,19 +10,21 @@ class CartRepository {
         .comprasRetrofit
         .create(CartApiService::class.java)
 
-    suspend fun obtenerCarrito(): List<Compras> {
-        return api.obtenerCarrito()
-    }
+    suspend fun obtenerCarrito(usuarioId: Long): CartResponse =
+        api.obtenerCarrito(usuarioId)
 
-    suspend fun agregarAlCarrito(compra: Compras): Compras {
-        return api.agregarAlCarrito(compra)
-    }
+    suspend fun agregarAlCarrito(usuarioId: Long, productoId: Long) =
+        api.agregarAlCarrito(usuarioId, productoId)
 
-    suspend fun actualizarCarrito(id: Long, compra: Compras): Compras {
-        return api.actualizarCarrito(id, compra)
-    }
+    suspend fun actualizarCarrito(usuarioId: Long, productoId: Long, cantidad: Int) =
+        api.actualizarCarrito(usuarioId, productoId, cantidad)
 
-    suspend fun eliminarDelCarrito(id: Long) {
-        api.eliminarDelCarrito(id)
-    }
+    suspend fun eliminarDelCarrito(usuarioId: Long, productoId: Long) =
+        api.eliminarDelCarrito(usuarioId, productoId)
+
+    suspend fun vaciarCarrito(usuarioId: Long) =
+        api.vaciarCarrito(usuarioId)
+
+    suspend fun confirmarCompra(usuarioId: Long) =
+        api.confirmarCompra(usuarioId)
 }

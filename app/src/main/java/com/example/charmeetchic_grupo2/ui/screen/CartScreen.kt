@@ -16,7 +16,13 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CartScreen(cartVM: CartViewModel) {
+
     val state by cartVM.state.collectAsState()
+
+    // Al entrar carga el carrito
+    LaunchedEffect(true) {
+        cartVM.cargarCarrito()
+    }
 
     Column(
         modifier = Modifier
@@ -24,18 +30,25 @@ fun CartScreen(cartVM: CartViewModel) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
+
         Text("Carrito", style = MaterialTheme.typography.headlineSmall)
 
         if (state.items.isEmpty()) {
             Box(
-                Modifier.weight(1f).fillMaxWidth(),
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
                 contentAlignment = Alignment.Center
             ) {
                 Text("Tu carrito está vacío")
             }
         } else {
-            LazyColumn(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                items(state.items, key = { it.product.id }) { ci ->
+            LazyColumn(
+                Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(state.items, key = { it.id }) { ci ->
+
                     Card {
                         Row(
                             Modifier
@@ -43,57 +56,88 @@ fun CartScreen(cartVM: CartViewModel) {
                                 .padding(12.dp),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
+
                             Column(Modifier.weight(1f)) {
-                                Text(ci.product.nombre, style = MaterialTheme.typography.titleMedium)
-                                Text("Precio: \$${ci.product.precio}")
-                                Text("Cantidad: ${ci.qty}")
-                                Text("Subtotal: \$${ci.subtotal}")
+
+                                Text(
+                                    ci.producto.nombre,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+
+                                Text("Precio: \$${ci.producto.precio}")
+                                Text("Cantidad: ${ci.cantidad}")
+                                Text("Subtotal: \$${ci.producto.precio * ci.cantidad}")
                             }
 
                             Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                OutlinedButton(onClick = { cartVM.dec(ci.product.id) }) { Text("-") }
-                                OutlinedButton(onClick = { cartVM.add(ci.product) }) { Text("+") }
-                                TextButton(onClick = { cartVM.remove(ci.product.id) }) { Text("Quitar") }
+
+                                // DISMINUIR CANTIDAD
+                                OutlinedButton(onClick = {
+                                    if (ci.cantidad > 1)
+                                        cartVM.actualizar(ci.productoId, ci.cantidad - 1)
+                                    else
+                                        cartVM.eliminar(ci.productoId)
+                                }) {
+                                    Text("-")
+                                }
+
+                                // AUMENTAR CANTIDAD
+                                OutlinedButton(onClick = {
+                                    cartVM.actualizar(ci.productoId, ci.cantidad + 1)
+                                }) {
+                                    Text("+")
+                                }
+
+                                // QUITAR PRODUCTO
+                                TextButton(onClick = {
+                                    cartVM.eliminar(ci.productoId)
+                                }) {
+                                    Text("Quitar")
+                                }
                             }
                         }
                     }
                 }
             }
-        }
 
-        Text(
-            "Total: \$${state.total}",
-            style = MaterialTheme.typography.titleMedium
-        )
+            // TOTAL
+            Text(
+                "Total: \$${state.total}",
+                style = MaterialTheme.typography.titleMedium
+            )
 
-        Button(
-            onClick = { cartVM.clearAndSuccess() },
-            enabled = state.items.isNotEmpty(),
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Finalizar compra")
-        }
-
-        AnimatedVisibility(
-            visible = state.successMsg != null,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Surface(
-                color = MaterialTheme.colorScheme.primaryContainer,
+            // CONFIRMAR COMPRA
+            Button(
+                onClick = { cartVM.confirmarCompra() },
+                enabled = state.items.isNotEmpty(),
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = state.successMsg ?: "",
-                    modifier = Modifier.padding(12.dp)
-                )
+                Text("Finalizar compra")
             }
-        }
 
-        if (state.successMsg != null) {
-            LaunchedEffect(state.successMsg) {
-                delay(2000)
-                cartVM.dismissMsg()
+            // MENSAJE (éxito / error)
+            AnimatedVisibility(
+                visible = state.mensaje != null,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                Surface(
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = state.mensaje ?: "",
+                        modifier = Modifier.padding(12.dp)
+                    )
+                }
+            }
+
+            // OCULTAR MENSAJE
+            if (state.mensaje != null) {
+                LaunchedEffect(state.mensaje) {
+                    delay(2000)
+                    cartVM.limpiarMensaje()
+                }
             }
         }
     }
