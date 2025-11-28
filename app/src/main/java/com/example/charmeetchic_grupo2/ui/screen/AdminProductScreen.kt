@@ -16,9 +16,10 @@ import com.example.charmeetchic_grupo2.domain.validation.*
 fun AdminProductScreen(
     productVM: ProductViewModel = viewModel()
 ) {
-    val productos = productVM.productList
-    val isLoading = productVM.isLoading
-    val error = productVM.errorMessage
+    val productos by productVM.productList
+    val isLoading by productVM.isLoading
+    val error by productVM.errorMessage
+
 
     // Campos
     var nombre by remember { mutableStateOf("") }
@@ -65,7 +66,7 @@ fun AdminProductScreen(
 
         if (error != null) {
             item {
-                Text(error, color = MaterialTheme.colorScheme.error)
+                Text(text = error!!, color = MaterialTheme.colorScheme.error)
             }
         }
 

@@ -20,14 +20,14 @@ fun AppTopBar(
     onGoHome: () -> Unit,
     onGoCatalog: () -> Unit,
     onGoCart: () -> Unit,
-/*    onGoRepare: () -> Unit,*/
     onGoAbout: () -> Unit,
     onGoContact: () -> Unit,
     onGoLogin: () -> Unit,
     onGoRegister: () -> Unit,
-    onGoAdmin: () -> Unit,   // 👈 Admin SIEMPRE visible
+    onGoAdmin: () -> Unit,
     cartVM: CartViewModel
 ) {
+
     var showMenu by remember { mutableStateOf(false) }
     val cartState by cartVM.state.collectAsState()
 
@@ -43,38 +43,28 @@ fun AppTopBar(
 
         navigationIcon = {
             IconButton(onClick = { showMenu = !showMenu }) {
-                Icon(Icons.Default.Menu, "Menú principal")
+                Icon(Icons.Default.Menu, contentDescription = "Menú")
             }
 
             DropdownMenu(
                 expanded = showMenu,
                 onDismissRequest = { showMenu = false }
             ) {
-
                 DropdownMenuItem(
                     text = { Text("Inicio") },
                     leadingIcon = { Icon(Icons.Default.Home, null) },
                     onClick = { showMenu = false; onGoHome() }
                 )
-
                 DropdownMenuItem(
                     text = { Text("Catálogo") },
                     leadingIcon = { Icon(Icons.Default.Storefront, null) },
                     onClick = { showMenu = false; onGoCatalog() }
                 )
-
-/*                DropdownMenuItem(
-                    text = { Text("Reparar y Personalizar") },
-                    leadingIcon = { Icon(Icons.Default.Build, null) },
-                    onClick = { showMenu = false; onGoRepare() }
-                )*/
-
                 DropdownMenuItem(
                     text = { Text("Sobre nosotros") },
                     leadingIcon = { Icon(Icons.Default.Info, null) },
                     onClick = { showMenu = false; onGoAbout() }
                 )
-
                 DropdownMenuItem(
                     text = { Text("Contacto") },
                     leadingIcon = { Icon(Icons.Default.Email, null) },
@@ -83,7 +73,6 @@ fun AppTopBar(
 
                 HorizontalDivider()
 
-                // ⭐ ADMIN SIEMPRE VISIBLE (sin Auth)
                 DropdownMenuItem(
                     text = { Text("Administrar productos") },
                     leadingIcon = { Icon(Icons.Default.Settings, null) },
@@ -109,7 +98,7 @@ fun AppTopBar(
         actions = {
             Box {
                 IconButton(onClick = onGoCart) {
-                    Icon(Icons.Default.ShoppingCart, "Carrito")
+                    Icon(Icons.Default.ShoppingCart, contentDescription = "Carrito")
                 }
 
                 if (cartState.items.isNotEmpty()) {

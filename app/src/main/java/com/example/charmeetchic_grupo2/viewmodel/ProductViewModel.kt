@@ -1,70 +1,72 @@
 package com.example.charmeetchic_grupo2.viewmodel
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.charmeetchic_grupo2.model.Product
 import com.example.charmeetchic_grupo2.model.ProductRequest
 import com.example.charmeetchic_grupo2.repository.ProductRepository
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProductViewModel : ViewModel() {
+class ProductViewModel(
+    private val repository: ProductRepository = ProductRepository(),
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+) : ViewModel() {
 
-    private val repository = ProductRepository()
-
-    var productList by mutableStateOf<List<Product>>(emptyList())
+    var productList = mutableStateOf<List<Product>>(emptyList())
         private set
 
-    var isLoading by mutableStateOf(false)
+    var isLoading = mutableStateOf(false)
         private set
 
-    var errorMessage by mutableStateOf<String?>(null)
+    var errorMessage = mutableStateOf<String?>(null)
         private set
-
 
     fun cargarProductos() {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try {
-                isLoading = true
-                errorMessage = null
-                productList = repository.getAllProducts()
+                isLoading.value = true
+                errorMessage.value = null
+                productList.value = repository.getAllProducts()
             } catch (e: Exception) {
-                errorMessage = "Error al cargar productos: ${e.message}"
+                errorMessage.value = "Error al cargar productos: ${e.message}"
             } finally {
-                isLoading = false
+                isLoading.value = false
             }
         }
     }
 
     fun crearProducto(req: ProductRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try {
                 repository.createProduct(req)
                 cargarProductos()
             } catch (e: Exception) {
-                errorMessage = "Error al crear producto"
+                errorMessage.value = "Error al crear producto"
             }
         }
     }
 
     fun actualizarProducto(id: Long, req: ProductRequest) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try {
                 repository.updateProduct(id, req)
                 cargarProductos()
             } catch (e: Exception) {
-                errorMessage = "Error al actualizar"
+                errorMessage.value = "Error al actualizar"
             }
         }
     }
 
     fun eliminarProducto(id: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             try {
                 repository.deleteProduct(id)
                 cargarProductos()
             } catch (e: Exception) {
-                errorMessage = "No se pudo eliminar"
+                errorMessage.value = "No se pudo eliminar"
             }
         }
     }

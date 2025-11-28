@@ -19,8 +19,7 @@ fun CartScreen(cartVM: CartViewModel) {
 
     val state by cartVM.state.collectAsState()
 
-    // Al entrar carga el carrito
-    LaunchedEffect(true) {
+    LaunchedEffect(Unit) {
         cartVM.cargarCarrito()
     }
 
@@ -34,110 +33,82 @@ fun CartScreen(cartVM: CartViewModel) {
         Text("Carrito", style = MaterialTheme.typography.headlineSmall)
 
         if (state.items.isEmpty()) {
-            Box(
-                Modifier
-                    .weight(1f)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text("Tu carrito está vacío")
             }
-        } else {
-            LazyColumn(
-                Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                items(state.items, key = { it.id }) { ci ->
+            return@Column
+        }
 
-                    Card {
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(12.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
+        LazyColumn(
+            Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            items(state.items, key = { it.id }) { ci ->
 
-                            Column(Modifier.weight(1f)) {
+                Card {
+                    Row(
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
 
-                                Text(
-                                    ci.producto.nombre,
-                                    style = MaterialTheme.typography.titleMedium
-                                )
+                        Column(Modifier.weight(1f)) {
 
-                                Text("Precio: \$${ci.producto.precio}")
-                                Text("Cantidad: ${ci.cantidad}")
-                                Text("Subtotal: \$${ci.producto.precio * ci.cantidad}")
-                            }
+                            Text(ci.producto.nombre, style = MaterialTheme.typography.titleMedium)
+                            Text("Precio: \$${ci.producto.precio}")
+                            Text("Cantidad: ${ci.cantidad}")
+                            Text("Subtotal: \$${ci.producto.precio * ci.cantidad}")
+                        }
 
-                            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-
-                                // DISMINUIR CANTIDAD
-                                OutlinedButton(onClick = {
-                                    if (ci.cantidad > 1)
-                                        cartVM.actualizar(ci.productoId, ci.cantidad - 1)
-                                    else
-                                        cartVM.eliminar(ci.productoId)
-                                }) {
-                                    Text("-")
-                                }
-
-                                // AUMENTAR CANTIDAD
-                                OutlinedButton(onClick = {
-                                    cartVM.actualizar(ci.productoId, ci.cantidad + 1)
-                                }) {
-                                    Text("+")
-                                }
-
-                                // QUITAR PRODUCTO
-                                TextButton(onClick = {
+                        Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            OutlinedButton(onClick = {
+                                if (ci.cantidad > 1)
+                                    cartVM.actualizar(ci.productoId, ci.cantidad - 1)
+                                else
                                     cartVM.eliminar(ci.productoId)
-                                }) {
-                                    Text("Quitar")
-                                }
-                            }
+                            }) { Text("-") }
+
+                            OutlinedButton(onClick = {
+                                cartVM.actualizar(ci.productoId, ci.cantidad + 1)
+                            }) { Text("+") }
+
+                            TextButton(
+                                onClick = { cartVM.eliminar(ci.productoId) }
+                            ) { Text("Quitar") }
                         }
                     }
                 }
             }
+        }
 
-            // TOTAL
-            Text(
-                "Total: \$${state.total}",
-                style = MaterialTheme.typography.titleMedium
-            )
+        Text("Total: \$${state.total}", style = MaterialTheme.typography.titleMedium)
 
-            // CONFIRMAR COMPRA
-            Button(
-                onClick = { cartVM.confirmarCompra() },
-                enabled = state.items.isNotEmpty(),
+        Button(
+            onClick = { cartVM.confirmarCompra() },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = state.items.isNotEmpty()
+        ) {
+            Text("Finalizar compra")
+        }
+
+        AnimatedVisibility(
+            visible = state.mensaje != null,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            Surface(
+                color = MaterialTheme.colorScheme.primaryContainer,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text("Finalizar compra")
+                Text(state.mensaje ?: "", modifier = Modifier.padding(12.dp))
             }
+        }
 
-            // MENSAJE (éxito / error)
-            AnimatedVisibility(
-                visible = state.mensaje != null,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                Surface(
-                    color = MaterialTheme.colorScheme.primaryContainer,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = state.mensaje ?: "",
-                        modifier = Modifier.padding(12.dp)
-                    )
-                }
-            }
-
-            // OCULTAR MENSAJE
-            if (state.mensaje != null) {
-                LaunchedEffect(state.mensaje) {
-                    delay(2000)
-                    cartVM.limpiarMensaje()
-                }
+        if (state.mensaje != null) {
+            LaunchedEffect(state.mensaje) {
+                delay(2000)
+                cartVM.limpiarMensaje()
             }
         }
     }
