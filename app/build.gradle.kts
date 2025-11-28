@@ -18,6 +18,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        create("release") {
+            storeFile = file("C:/Users/Daniela/Documents/DUOC/App Moviles/keystores/charmeetchic.jks")
+            storePassword = "charme2025"
+            keyAlias = "charme_key"
+            keyPassword = "charme2025"
+        }
+    }
 
     buildTypes {
         release {
@@ -26,6 +34,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
