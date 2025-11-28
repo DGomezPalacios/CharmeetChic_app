@@ -62,3 +62,4 @@ class ProductViewModelTest {
         assertEquals(fakeProducts, vm.productList.value)
     }
 }
+

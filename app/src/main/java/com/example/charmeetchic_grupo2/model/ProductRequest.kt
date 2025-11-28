@@ -5,9 +5,9 @@ data class ProductRequest(
     val descripcion: String,
     val precio: Double,
     val stock: Int,
-    val material: String?,
+    val material: String,
     val peso: Double?,
-    val medidas: String?,
+    val medidas: String,
     val categoriaId: Long,
     val imagenUrl: String? = null
 )

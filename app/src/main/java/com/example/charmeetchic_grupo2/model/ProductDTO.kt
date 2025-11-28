@@ -5,10 +5,5 @@ data class ProductDTO(
     val nombre: String,
     val descripcion: String,
     val precio: Double,
-    val stock: Int,
-    val material: String,
-    val peso: Double?,
-    val medidas: String,
-    val categoriaId: Long,
-    val imagenUrl: String?
+    val stock: Int?
 )
