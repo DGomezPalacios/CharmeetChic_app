@@ -1,22 +1,47 @@
 package com.example.charmeetchic_grupo2.data.remote
 
-import com.example.charmeetchic_grupo2.model.Compras
+import com.example.charmeetchic_grupo2.model.CartResponse
 import retrofit2.http.*
 
 interface CartApiService {
 
-    @GET("api/compras")
-    suspend fun obtenerCarrito(): List<Compras>
+    // Obtener carrito del usuario
+    @GET("api/compras/carrito-completo/{userId}")
+    suspend fun obtenerCarrito(
+        @Path("userId") userId: Long
+    ): CartResponse
 
-    @POST("api/compras")
-    suspend fun agregarAlCarrito(@Body compra: Compras): Compras
+    // Agregar producto al carrito
+    @POST("api/compras/carrito/agregar")
+    suspend fun agregarAlCarrito(
+        @Query("usuarioId") usuarioId: Long,
+        @Query("productoId") productoId: Long
+    )
 
-    @PUT("api/compras/{id}")
+    // Actualizar cantidad de un producto del carrito
+    @PUT("api/compras/carrito/{usuarioId}/producto/{productoId}")
     suspend fun actualizarCarrito(
-        @Path("id") id: Long,
-        @Body compra: Compras
-    ): Compras
+        @Path("usuarioId") usuarioId: Long,
+        @Path("productoId") productoId: Long,
+        @Query("cantidad") cantidad: Int
+    )
 
-    @DELETE("api/compras/{id}")
-    suspend fun eliminarDelCarrito(@Path("id") id: Long)
+    // Eliminar producto del carrito
+    @DELETE("api/compras/carrito/{usuarioId}/producto/{productoId}")
+    suspend fun eliminarDelCarrito(
+        @Path("usuarioId") usuarioId: Long,
+        @Path("productoId") productoId: Long
+    )
+
+    // Vaciar carrito completo
+    @DELETE("api/compras/carrito/{usuarioId}")
+    suspend fun vaciarCarrito(
+        @Path("usuarioId") usuarioId: Long
+    )
+
+    // Confirmar compra → convierte el carrito en compra real
+    @POST("api/compras/carrito/{usuarioId}/confirmar")
+    suspend fun confirmarCompra(
+        @Path("usuarioId") usuarioId: Long
+    )
 }
