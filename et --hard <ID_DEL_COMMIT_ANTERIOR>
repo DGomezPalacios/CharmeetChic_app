@@ -1,0 +1,58 @@
+[33m2c14f6b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mberta[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/daniela[m[33m, [m[1;31morigin/berta[m[33m, [m[1;31morigin/HEAD[m[33m)[m final final todo ok
+[33m5c55bb5[m readme
+[33m63b4071[m merge berta
+[33mbe73b87[m Tests unitarios
+[33m68892f3[m todo ok
+[33m5668a12[m test final
+[33m3923630[m firma
+[33m02864a7[m tst screen
+[33m9716684[m mensaje eliminacion
+[33m9ecd964[m crud prd ok
+[33m87d1cd2[m[33m ([m[1;32mmaster[m[33m, [m[1;32mdaniela[m[33m)[m Merge branch 'berta' of https://github.com/DGomezPalacios/CharmeetChic_app into daniela
+[33maff7d85[m Carrito conexion
+[33me081ee7[m repare comentado2
+[33m5b92891[m repare comentado
+[33mfd43c67[m merge
+[33m66664cf[m prueba merge
+[33m823703a[m amind prod ok
+[33m64df380[m main app
+[33m7e52aae[m crud prod screen
+[33mdaad045[m Actualización Product
+[33m314d9f6[m imag ok
+[33m89447d7[m  uktimo
+[33m3dd047e[m ultimo sin imag
+[33ma56e1f8[m andorsd manifest y networs security
+[33m8cecf51[m sin errores, no carga prod
+[33m21836c2[m fix producto
+[33m29e30e2[m Subiendo backend finalizado A2
+[33maabc968[m Mejoras y CartViewModel
+[33me717eb0[m Cart y ContactViewModel + Cart y ContactRepository
+[33mc341ee5[m Actualización Product, CatalogScreen, ProductRepository y ProductViewModel
+[33m6aaa2ac[m Dependencias Retrofit y Permiso Manifest
+[33m3ebd864[m Creación ContactRequest
+[33mf8c5ab3[m Actualizacion model Login, Register, Cart, User/Validaciones Login y Registration
+[33m3650518[m Detalles
+[33m2394b76[m Merge branch 'daniela' into berta
+[33md5f8028[m final
+[33mb84710e[m Imagenes Catálogo, Home y About
+[33mb7da74d[m resolucion conflicto merge
+[33m0b885cf[m Unifiación
+[33m5e65c78[m boton r&p y main activity unificadoo
+[33m7c4fb22[m Animación funcional 2
+[33mfe752c5[m validacion R&P, r&P ViewModel
+[33mad46c68[m Readme
+[33md5a422b[m DataStore Cart
+[33m385fa50[m Prueba cambio de colores y temas
+[33m7c4c931[m Mejora RepareAndPers
+[33m24c092e[m menu-theme-nav e implementaciones
+[33md1238d1[m recursos nativos contact and repare
+[33m810654d[m fix: merge Routes.kt con rutas unificadas
+[33m29a23e0[m RepareAndPers
+[33m4b3a98b[m arreglo validators
+[33m2af76ec[m 4 pantallas
+[33mfc74a6e[m Avance Home, Login, Registration, Validation y Navegation
+[33m76ee157[m Merge pull request #1 from DGomezPalacios/daniela
+[33m03c59c1[m pantallas
+[33mdc67bc0[m prueba
+[33m177977d[m Create README.md
+[33m2b04913[m Inicio de proyecto + estructura  base MVVM.
