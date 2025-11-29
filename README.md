@@ -1,32 +1,49 @@
-# Charme et Chic — App Móvil (Compose + MVVM)
+# Charme et Chic — App Móvil
 
 **Integrantes:** Daniela Gómez Palacios, Berta Soto Jerez  
 **Asignatura:** DSY1105
 **Docente:** Sergio Fuentes Perez
 
-## 🎯 Objetivo
-App móvil para vitrinear joyas, agregar al carrito y contactar a la tienda. Construida con **Jetpack Compose + Material 3**, navegación con `NavHost`, arquitectura **MVVM**, almacenamiento local con **DataStore** y uso de **recursos nativos** (llamadas, maps, image picker/galería).
+## 🎯 Sobre la app
 
-## ✨ Funcionalidades
-- Home, Catálogo, Carrito, Contacto, Login/Registro, About, Reparación y Personalización.
-- Validaciones visuales (errores/ok) en **Login, Registro, Contacto y Reparación**.
-- Barra superior (**TopAppBar**) con navegación a todas las pantallas.
-- Recursos nativos:
-    - **Contacto:** llamar / abrir Maps.
-    - **Reparar/Personalizar:** **PhotoPicker** / galería.
-- **Persistencia local (DataStore):** sesión y carrito.
+Proyecto desarrollado para la asignatura **Desarrollo de Aplicaciones Móviles**.  
+La app permite gestionar productos, visualizar información, agregar al carrito, realizar flujos CRUD.
+Está construida en **Android Studio + Jetpack Compose** e integrada con microservicios en Spring Boot.
 
-## 🗺️ Arquitectura
-- **MVVM + StateFlow**: `ViewModel` expone `UiState` inmutable; los Composables solo observan estado.
-- **Dominio/Validaciones**: `domain/validation/Validators.kt`
-- **Data**: `data/SessionDataStore.kt`, `data/CartDataStore.kt`
-- **UI**: `ui/screen/*`, `ui/components/*`
-- **Navegación**: `navigation/NavGraph.kt`, `navigation/Routes.kt`
+## 🔧 Funcionalidades Principales
+- Interfaz visual completa creada con Jetpack Compose
+- CRUD funcional conectado al microservicio:
+  - Crear, listar, actualizar y eliminar productos
+- Carrito de compras con ViewModel
+- Consumo de API externa integrado al flujo visual
+- Validaciones visuales y manejo de errores
+- Pruebas unitarias implementadas (ProductoViewModel y CartViewModel)
+- Actualización en vivo tras operaciones CRUD
+- APK firmado listo para instalación
 
-## ▶️ Cómo ejecutar
-1. Android Studio Giraffe+ • SDK 35 (o 34)
-2. `Sync Project`
-3. Ejecutar en **emulador físico/lógico** (permisos de teléfono/mapas habilitados).
+## 🔗 Endpoints Utilizados
+
+### 🟦 Microservicio Productos (Spring Boot)
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| GET    | `/productos` | Listar productos |
+| GET    | `/productos/{id}` | Obtener producto |
+| POST   | `/productos` | Crear producto |
+| PUT    | `/productos/{id}` | Actualizar producto |
+| DELETE | `/productos/{id}` | Eliminar producto |
+
+## ▶ Pasos para Ejecutar
+
+### 📌 **Backend (Spring Boot)**
+1. Clonar el repositorio del microservicio (Sumativa2).
+2. Ejecutar el proyecto en Spring Boot con MySQL activo.
+3. Verificar disponibilidad en puerto respectivo de Compras y Productos
+
+### 📌 **Aplicación Móvil**
+1. Abrir el proyecto en Android Studio.
+2. Revisar la URL base en Retrofit (`http://10.0.2.2:(el que corresponda)/`).
+3. Ejecutar la app en emulador o dispositivo físico.
+4. Permitir tráfico HTTP para desarrollo (cleartextTraffic).
 
 ## 📊 Herramientas colaborativas
 - **Repositorio GitHub:**  
@@ -34,6 +51,6 @@ App móvil para vitrinear joyas, agregar al carrito y contactar a la tienda. Con
 - **Tablero Jira (Scrum Board):**  
   [https://duocuc-team-znu3stsr.atlassian.net/jira/software/projects/SCRUM/boards/1](https://duocuc-team-znu3stsr.atlassian.net/jira/software/projects/SCRUM/boards/1)
 - **Metodología:** Scrum (2 integrantes)
-    - Historias de usuario y tareas distribuidas equitativamente.
-    - Sprint activo con tareas en progreso, QA y completadas.
-    - Evidencia visual en Jira y commits asociados a cada ticket
+  - Historias de usuario y tareas distribuidas equitativamente.
+  - Sprint activo con tareas en progreso, QA y completadas.
+  - Evidencia visual en Jira y commits asociados a cada ticket
